@@ -7,11 +7,9 @@ export default StyleSheet.create(
     {
         actionButton:
             {
-
                 width: '100%',
                 height:'100%',
                 backgroundColor: BaseColor,
-
             },
         actionButtonContainer:
             {
@@ -610,6 +608,16 @@ export default StyleSheet.create(
                 position:'absolute',
                 left: 15,
                 top:10
+            },
+        viewBoxLogo:
+            {
+                width:Window.width*0.1,
+                height:Window.width*0.1,
+            },
+        viewBoxTitleBox:
+            {
+                width:'100%',
+                alignItems: 'flex-end'
             },
     },
 

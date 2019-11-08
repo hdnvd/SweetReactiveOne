@@ -117,7 +117,7 @@ export default class  placeman_placeManage extends SweetPage {
                                         {
                                             global.placeId=data.Data.id;
                                             if(id==='')
-                                                this.props.navigation.navigate('trapp_villaManage', { name: 'trapp_villaManage' });
+                                                this.props.navigation.navigate('trapp_villaManageNew', { name: 'trapp_villaManageNew' });
                                             else
                                                 this.props.navigation.navigate('trapp_villaReservationInfo', { name: 'trapp_villaReservationInfo' });
 

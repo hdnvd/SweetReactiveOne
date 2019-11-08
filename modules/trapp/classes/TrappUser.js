@@ -13,7 +13,8 @@ export default class TrappUser {
             if (roles == 'trapp_user')
             {
                 console.log("trapp_user:" + roles);
-                navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'));
+                // navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'));
+                navigation.dispatch(Navigation.resetNavigationAndNavigate('Trapp_villaSearchIndex'));
             }
 
             else if (roles == 'trapp_villaowner') {
@@ -35,7 +36,7 @@ export default class TrappUser {
                     {
                         global.placeId=places[0].id;
                         global.ownerId=owners[0].id;
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaManage'));
+                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaManageNew'));
                     }
                     else
                     {

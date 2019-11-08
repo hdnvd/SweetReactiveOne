@@ -8,7 +8,7 @@ export default class Localization{
         let lang = isIOS ? NativeModules.SettingsManager.settings.AppleLocale : NativeModules.I18nManager.localeIdentifier;
         lang=lang.toLowerCase();
         let isRTL=false;
-        SweetConsole.log(lang);
+        // SweetConsole.log(lang);
         // if(lang!=null)
         //     isRTL=lang.includes('fa');
         global.isRTL=isRTL;

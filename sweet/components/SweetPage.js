@@ -1,25 +1,24 @@
 import React, {Component} from 'react';
-import {BackHandler, Dimensions, StyleSheet} from 'react-native';
-import {NavigationState} from 'react-navigation'
+import {View, Dimensions, StyleSheet} from 'react-native';
 import generalStyles from '../../styles/generalStyles';
 import HeaderSize from '../../classes/HeaderSize';
 
 export default class SweetPage extends Component<{}> {
+    Window = Dimensions.get('window');
+    state =
+        {
+            ...super.state,
+            isLoading: false,
+        };
     componentWillUnmount() {
         this.removeBackHandler();
     }
     componentDidMount() {
-        // this.backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{
-        //     console.log('getting back');
-        //     return false;
-        // });
     }
     removeBackHandler(){
-
         if(this.backHandler!=null)
             this.backHandler.remove();
     }
-
     getActiveRouteState(route) {
         if (!route.routes || route.routes.length === 0 || route.index >= route.routes.length) {
             return route;
@@ -29,8 +28,14 @@ export default class SweetPage extends Component<{}> {
         return this.getActiveRouteState(childActiveRoute);
     }
     getManagementPageHeight=()=>{
-        let Window = Dimensions.get('window');
-        return '100%'-(StyleSheet.flatten(generalStyles.actionButtonContainer).height+HeaderSize.getHeaderHeight()+10);
+        return this.Window.height-(StyleSheet.flatten(generalStyles.actionButtonContainer).height+HeaderSize.getHeaderHeight()+20);
+        // return 500;
+        // return 100;
     };
+    renderPage(content)
+    {
+        return (<View flex={1}>{content}</View>);
+    }
+
 
 }

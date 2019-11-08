@@ -17,6 +17,37 @@ export default class  PlaceManager {
     set onAreasLoaded(value) {
         this._onAreasLoaded = value;
     }
+    static findPlaces(Text)
+    {
+        let t=Text.replace(" ","");
+        let fPs=[];
+        let fCs=[];
+        let fAs=[];
+        for(let p of global.provinces)
+        {
+            if(p.title.includes(t))
+                fPs.push(p);
+            for(let c of p.cities)
+            {
+                if(c.title.includes(t))
+                {
+                    c.province=p;
+                    fCs.push(c);
+                }
+                for(let a of c.areas)
+                    if(a.title.includes(t))
+                    {
+
+                        a.city=c;
+                        fAs.push(a);
+                    }
+            }
+        }
+        let result=[fPs,fCs,fAs];
+        // console.log(result[0].map(a=>{return a.title}));
+        // console.log(result);
+        return result;
+    }
     _onProvincesLoaded=(a)=>{};
     _onCitiesLoaded=(a)=>{};
     _onAreasLoaded=(a)=>{};

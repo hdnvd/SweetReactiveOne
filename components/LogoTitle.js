@@ -32,9 +32,9 @@ class LogoTitle extends Component {
                     <Text
                         style={styles.toptext}>{this.props.title}</Text>
                     }
+
                     {!this.props.hasOwnProperty('title') &&
-                    <Image source={require('../images/LogoTextWhite.png')} style={styles.logoimg}
-                           resizeMode={'stretch'}/>
+                    <Image source={Constants.BaseTopMenuIcon} style={styles.logoimg} resizeMode={'stretch'}/>
                     }
                     {!this.props.hideMenu &&
                     <TouchableHighlight onPress={this.props.onNavigationClick} style={styles.imgContainerRight}

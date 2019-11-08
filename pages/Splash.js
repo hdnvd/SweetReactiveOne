@@ -24,11 +24,12 @@ export default class Splash extends Component<{}> {
 
         new SweetFetcher().Fetch('/placeman/provincesfull',SweetFetcher.METHOD_GET, null, data => {
             global.provinces=data.Data;
+
+            this.timeoutHandle = setTimeout(()=>{
+                this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'));
+            }, 1000);
         });
 
-        // this.timeoutHandle = setTimeout(()=>{
-            this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'));
-        // }, 3000);
     }
 
     componentWillUnmount(){

@@ -75,7 +75,7 @@ class SweetFetcher {
                     // alert("71");
                 Fetched.then(response => {
                     try {
-                        SweetConsole.log(response);
+                        SweetConsole.log(response,"RESPONSE OF URL:"+URL);
                     } catch (e) {
 
                     }
@@ -83,7 +83,7 @@ class SweetFetcher {
                     // alert("78");
                     let data = response.data;
                     if (data != null) {
-                        SweetConsole.log(data);
+                        SweetConsole.log(data,"RESPONSE DATA OF URL:"+URL);
                         if (Array.isArray(data.Data)) {
                             for (let i = 0; i < data.Data.length; i++) {
                                 data.Data[i] = Common.convertObjectPropertiesToLowerCase(data.Data[i]);
@@ -204,8 +204,8 @@ class SweetFetcher {
                             SweetAlert.displaySimpleAlert("خطا", 'خطایی پیش بینی نشده ای به وجود آمد، لطفا چند دقیقه دیگر مراجعه نمایید ');
                     }
 
-                    SweetConsole.log(error.response);
-                    SweetConsole.log(error);
+                    SweetConsole.log(error.response,'Error Response');
+                    SweetConsole.log(error,'Error');
                 });
 
                 // }).catch(

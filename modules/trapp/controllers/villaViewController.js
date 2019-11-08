@@ -12,10 +12,22 @@ export default class VillaViewController extends controller{
 
         });
     }
+    static sendComment(villaId,commentText,rate,onSend,onError)
+    {
+        let data=new FormData();
+        data.append('text',commentText);
+        data.append('ratenum',rate);
+        data.append('subjectentity',villaId);
+        data.append('commenttype','1');
+        new SweetFetcher().Fetch('/comments/comment', SweetFetcher.METHOD_POST, data, data => {
+            if(data.hasOwnProperty('Data'))
+                onSend(data.Data);
+            else
+                onError(null);
+        },error=>{onError(error);},'comments','comment',null);
+    }
     static openGps(villaId,latitude,longitude)
     {
-        if(this.state.LoadedData!=null)
-        {
             const label = 'ویلای کد '+villaId;
             showLocation({
                 latitude: latitude,
@@ -26,6 +38,5 @@ export default class VillaViewController extends controller{
                 dialogMessage: 'از کدام نرم افزار می خواهید استفاده کنید؟', // optional (default: 'What app would you like to use?')
                 cancelText: 'هیچکدام', // optional (default: 'Cancel')
             });
-        }
     };
 }

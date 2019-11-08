@@ -15,7 +15,7 @@ import Splash from "../../pages/Splash";
 import Login from "../../modules/users/pages/Login";
 import trapp_villaReservationInfo from "../../modules/trapp/pages/villa/trapp_villaReservationInfo";
 import trapp_orderList from "../../modules/trapp/pages/order/trapp_orderList";
-import trapp_villaManage from "../../modules/trapp/pages/villa/trapp_villaManage";
+import trapp_villaManageNew from "../../modules/trapp/pages/villa/trapp_villaManageNew";
 import placeman_placeManage from "../../modules/placeman/pages/place/placeman_placeManage";
 import placeman_placeView from "../../modules/placeman/pages/place/placeman_placeView";
 import placeman_placeList from "../../modules/placeman/pages/place/placeman_placeList";
@@ -24,6 +24,7 @@ import trapp_villaownerList from "../../modules/trapp/pages/villaowner/trapp_vil
 import trapp_villaownerView from "../../modules/trapp/pages/villaowner/trapp_villaownerView";
 import trapp_villaView from "../../modules/trapp/pages/villa/trapp_villaView";
 import trapp_villaReserve from "../../modules/trapp/pages/villa/trapp_villaReserve";
+import Trapp_villaSearchIndex from "../../modules/trapp/pages/villa/Trapp_villaSearchIndex";
 import sas_unitList from "../../modules/sas/pages/unit/sas_unitList";
 import sas_unitManage from "../../modules/sas/pages/unit/sas_unitManage";
 import MapPage from "../../pages/MapPage";
@@ -35,6 +36,8 @@ import PlaceVerification from "../../pages/PlaceVerification";
 import LogoTitle from "../LogoTitle";
 import Common from "../../classes/Common";
 import trapp_villaoptionManage from "../../modules/trapp/pages/villaoption/trapp_villaoptionManage";
+import carserviceorderRoutes from '../../modules/carserviceorder/routes/carserviceorderRoutes';
+import commentsRoutes from '../../modules/comments/routes/commentsRoutes';
 const navOptions =({navigation}) => {
     return {
         headerLeft: null,
@@ -81,7 +84,7 @@ let initialRoute={
     Login:{screen:Login,navigationOptions:navOptionsWithNoMenu},
     trapp_villaoptionManage: {screen:trapp_villaoptionManage,navigationOptions:getNavOptionsMenuFromTitle('امکانات ویلا')},
     trapp_villaownerManage: {screen:trapp_villaownerManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات صاحب ویلا')},
-    trapp_villaManage: {screen:trapp_villaManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات ویلا')},
+    trapp_villaManage: {screen:trapp_villaManageNew,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات ویلا')},
     placeman_placeManage: {screen:placeman_placeManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات مکان ویلا')},
     placeman_placePhotoManage: {screen:placeman_placePhotoManage,navigationOptions:getNavOptionsMenuFromTitle('تصاویر ویلا')},
 };
@@ -95,6 +98,7 @@ const Pages={
     trapp_villaView: trapp_villaView,
     trapp_villaReserve:  trapp_villaReserve,
     trapp_villaList:  trapp_villaList,
+    Trapp_villaSearchIndex:  Trapp_villaSearchIndex,
     sas_unitList:  sas_unitList,
     sas_unitManage: sas_unitManage,
     MapPage:  MapPage,
@@ -103,7 +107,8 @@ const Pages={
     ManageBranch:  ManageBranch,
     SelectLocation:  SelectLocation,
 };
-let Routes=PageToRoute(initialRoute,Pages);
+var AllPages = Object.assign({}, Pages, carserviceorderRoutes,commentsRoutes);
+let Routes=PageToRoute(initialRoute,AllPages);
 // console.log(Routes);
 const stackNav =createStackNavigator(Routes);
 

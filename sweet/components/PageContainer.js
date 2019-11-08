@@ -31,7 +31,7 @@ export default class PageContainer extends Component<{}> {
                 </View>
                 }
                 {!this.props.isLoading && !this.props.isEmpty &&
-                    this.props.content
+                    this.props.children
                 }
             </View>
         );

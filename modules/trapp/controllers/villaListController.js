@@ -8,16 +8,20 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import Geolocation from '@react-native-community/geolocation';
 import SweetAlert from '../../../classes/SweetAlert';
 export default class VillaListController extends controller{
+
+    static SORTFIELD_NORMALPRICE = 'normalpriceprc';
+    static SORTFIELD_DISTANCE = 'distance';
     loadData = (SearchText, SearchFields,nextStartRow,sortField,latitude,longitude,onLoad) => {
 
         SweetConsole.log(SearchFields);
         let Request = new SweetHttpRequest();
         Request.appendVariablesFromObjectKeys(SearchFields,true);
         Request.appendVariable('__pagesize', Constants.DEFAULT_PAGESIZE);
-        if (sortField === this.SORTFIELD_NORMALPRICE)
+        if (sortField === VillaListController.SORTFIELD_NORMALPRICE)
             Request.appendVariable('normalpriceprc__sort', '1');
-        if (sortField === this.SORTFIELD_DISTANCE)
+        else
             Request.appendVariable('distance__sort', '1');
+        // if (sortField === VillaListController.SORTFIELD_DISTANCE)
         try {
 
             Request.appendVariable('userlatitude',latitude,true);

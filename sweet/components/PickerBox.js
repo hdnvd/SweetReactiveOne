@@ -5,35 +5,55 @@
  */
 
 import React, { Component } from 'react';
-import {Text, View, Picker} from 'react-native';
+import {Text, View, Picker, TouchableOpacity} from 'react-native';
 import generalStyles from "../../styles/generalStyles";
 import SFMan from "../../classes/SFMan";
 
 export default class PickerBox extends Component<{}> {
-    render() {
-        // console.log("DATA__+_(_()())_+");
+    titleFieldName='id';
+    valueFieldName='id';
+    showEmptyTitle=true;
+    init(){
+        this.titleFieldName=this.props.titleFieldName;
+        this.valueFieldName=this.props.valueFieldName;
+        if(this.valueFieldName==null)
+            this.valueFieldName='id';
+        if(this.props.options!=null && this.props.options.length>0) {
+            if (this.titleFieldName == null)
+                this.titleFieldName = SFMan.getTitleFieldFromObject(this.props.options[0]);
+        }
+    };
+
+    getItem=(item,itemTitle,itemValue)=>{
+        return <Picker.Item label={itemTitle} value={itemValue}/>;
+    };
+    constructor(props) {
+        super(props);
+    }
+    getItemViews()
+    {
+        this.init();
+        let OptionViews=null;
         let Options=this.props.options;
-        let titleFieldName=this.props.titleFieldName;
-        let valueFieldName=this.props.valueFieldName;
-        if(valueFieldName==null)
-            valueFieldName='id';
         if(Options!=null && Options.length>0) {
-            if (titleFieldName == null)
-                titleFieldName = SFMan.getTitleFieldFromObject(Options[0]);
-            Options = Options.map(data => {
-                return <Picker.Item label={data[titleFieldName]} value={data[valueFieldName]}/>
+            OptionViews = Options.map(data => {
+                return this.getItem(data,data[this.titleFieldName],data[this.valueFieldName]);
             });
         }
         let EmptyItemTitle=this.props.emptyItemTitle;
         if(EmptyItemTitle==null)
             EmptyItemTitle='انتخاب کنید';
-        if(this.props.isOptional && Options!=null)
+        if(this.showEmptyTitle && Options!=null)
         {
-            Options=[<Picker.Item label={EmptyItemTitle} value='-1'/>,...Options];
+            OptionViews=[this.getItem({},EmptyItemTitle,'-1'),...OptionViews];
         }
-        else if(Options==null)
-            Options=[<Picker.Item label={this.props.title} value='-1'/>];
-
+        else if(Options==null) {
+            OptionViews = [this.getItem({},this.props.title,'-1')];
+        }
+        return OptionViews;
+    }
+    render() {
+        let OptionViews=this.getItemViews();
         return (
             <View>
                 <Text style={generalStyles.inputLabel}>{this.props.title}</Text>
@@ -42,7 +62,7 @@ export default class PickerBox extends Component<{}> {
                         selectedValue ={this.props.selectedValue}
                         onValueChange={this.props.onValueChange}
                 >
-                    {Options}
+                    {OptionViews}
                 </Picker>
             </View>);
     }

@@ -37,7 +37,7 @@ class SideMenu extends Component {
                             <View>
                                 <MenuItem title={'اطلاعات صاحب ویلا'} icon={require('../../images/icons/drawericons/ownerinfo.png')} onPress={this.navigateToScreen('trapp_villaownerManage')}/>
                                 <MenuItem title={'اطلاعات مکان ویلا'} icon={require('../../images/icons/drawericons/locationinfo.png')} onPress={this.navigateToScreen('placeman_placeManage')}/>
-                                <MenuItem title={'اطلاعات ویلا'} icon={require('../../images/icons/drawericons/villainfo.png')} onPress={this.navigateToScreen('trapp_villaManage')}/>
+                                <MenuItem title={'اطلاعات ویلا'} icon={require('../../images/icons/drawericons/villainfo.png')} onPress={this.navigateToScreen('trapp_villaManageNew')}/>
                                 <MenuItem title={'تصاویر ویلا'} icon={require('../../images/icons/drawericons/photos.png')} onPress={this.navigateToScreen('placeman_placePhotoManage')}/>
                                 <MenuItem title={'امکانات ویلا'} icon={require('../../images/icons/drawericons/options.png')} onPress={this.navigateToScreen('trapp_villaoptionManage')}/>
                                 <MenuItem title={'مدیریت ویلا'} icon={require('../../images/icons/drawericons/management.png')} onPress={this.navigateToScreen('trapp_villaReservationInfo')}/>

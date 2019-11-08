@@ -75,6 +75,16 @@ class Common{
         else
             return Variable;
     }
+    static appendObject2FormData(theObject,formData)
+    {
+        let keys = Object.keys(theObject);
+        console.log(keys);
+        keys.forEach(key=>{
+            console.log(key);
+            formData.append(key, theObject[key]);
+        });
+        return formData;
+    }
 }
 
 export default Common;

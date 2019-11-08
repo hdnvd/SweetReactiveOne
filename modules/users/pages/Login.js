@@ -26,6 +26,7 @@ import SweetButton from "../../../sweet/components/SweetButton";
 import SweetCheckBox from "../../../sweet/components/SweetCheckBox";
 import SweetPage from '../../../sweet/components/SweetPage';
 import SweetConsole from '../../../classes/SweetConsole';
+import UserNavigator from '../classes/UserNavigator';
 
 export default class Login extends SweetPage {
     LOGINTYPE_NOTASKED=1;
@@ -117,7 +118,10 @@ export default class Login extends SweetPage {
                         global.isnewprofile = false;
                         OnEnd(true);
                         this.removeBackHandler();
-                        TrappUser.navigateToUserStartPage(this.props.navigation);
+                        // UserNavigator.navigateToUserStartPage(this.props.navigation);
+                        UserNavigator.navigateToUserStartPage(this.props.navigation);
+
+                        // TrappUser.navigateToUserStartPage(this.props.navigation);
                     }
                     else
                         Alert.alert('خطا', "اطلاعات کاربری صحیح نمی باشد.");
@@ -150,7 +154,7 @@ export default class Login extends SweetPage {
                 <View style={styles.container}>
                     {this.state.loginType === this.LOGINTYPE_NOTASKED &&
                     <View style={styles.container}>
-                        <Image source={Constants.BasePureIcon} style={styles.TopImage} resizeMode={'stretch'}/>
+                        {/*<Image source={Constants.BasePureIcon} style={styles.TopImage} resizeMode={'stretch'}/>*/}
                         <SweetButton title="ورود" onPress={(OnEnd) => {
                             OnEnd(true);
                             this.setState({loginType:this.LOGINTYPE_LOGIN});
@@ -279,7 +283,8 @@ export default class Login extends SweetPage {
         else
         {
             global.isnewprofile=false;
-            TrappUser.navigateToUserStartPage(this.props.navigation);
+            // TrappUser.navigateToUserStartPage(this.props.navigation);
+            UserNavigator.navigateToUserStartPage(this.props.navigation);
             return(<View/>);
         }
 

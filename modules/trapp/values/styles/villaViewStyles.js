@@ -1,11 +1,46 @@
-import {Dimensions, StyleSheet} from "react-native";
+import {Dimensions, StyleSheet, View} from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import Localization from '../../../../classes/Localization';
 import Constants from '../../../../classes/Constants';
-let BaseColor=Constants.BaseColor;
+import React from 'react';
+
+let BaseColor = Constants.BaseColor;
 let Window = Dimensions.get('window');
 export default StyleSheet.create(
     {
+        tabViewTopBar:
+            {
+                width: '100%',
+                backgroundColor: Constants.BaseColor,
+                height: Window.height * 0.07,
+                flexDirection: 'row-reverse',
+                justifyContent: 'center',
+                alignItems: 'center',
+            },
+        tabViewTopBarItem:
+            {
+                flex: 1,
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+            },
+
+        tabViewTopBarItemText:
+            {
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: Constants.BaseFontName,
+            },
+        tabViewTopBarItemActiveBar:
+            {
+                width: '100%',
+                backgroundColor: '#ff0',
+                height: 5,
+                alignSelf:'flex-end',
+                position:'absolute',
+                bottom:0,
+            },
+
         footerBar:
             {
                 width: Window.width,
@@ -38,8 +73,17 @@ export default StyleSheet.create(
                 ...StyleSheet.flatten(generalStyles.SweetButton), backgroundColor: '#60c62b',
                 borderWidth: 1,
                 borderColor: '#000000',
-                width:Window.width*0.4,
-                marginHorizontal: Window.width*0.05,
+                width: Window.width * 0.4,
+                marginHorizontal: Window.width * 0.05,
+            },
+
+        ButtonFullComment:
+            {
+                ...StyleSheet.flatten(generalStyles.SweetButton), backgroundColor: '#60c62b',
+                borderWidth: 1,
+                borderColor: '#000000',
+                width: Window.width * 0.9,
+                marginHorizontal: Window.width * 0.05,
             },
         Button3:
             {
@@ -47,50 +91,29 @@ export default StyleSheet.create(
                 backgroundColor: '#317c0a',
                 borderWidth: 1,
                 borderColor: '#000000',
-                width:Window.width*0.4,
-                marginHorizontal: Window.width*0.05,
-            },
-        viewBoxCaption:
-            {
-                ...StyleSheet.flatten(generalStyles.viewBoxCaption)
+                width: Window.width * 0.4,
+                marginHorizontal: Window.width * 0.05,
             },
         viewBox:
             {
                 ...StyleSheet.flatten(generalStyles.viewBox),
-                position:'relative',
-                zIndex:3,
+                position: 'relative',
+                zIndex: 3,
             },
-        viewBoxLogo:
+        viewBoxStyle:
             {
-                width:Window.width*0.1,
-                height:Window.width*0.1,
-            },
-        viewBoxTitleBox:
-            {
-                width:'100%',
-                alignItems: 'flex-end'
+                position: 'relative',
+                zIndex: 3,
             },
         footer:
             {
-                width:'100%',
-                flexDirection:Localization.getRowReverseDirection(),
-                position:'absolute',
-                height:StyleSheet.flatten(generalStyles.SweetButton).height+5,
-                bottom:5,
-                zIndex:3,
+                width: '100%',
+                flexDirection: Localization.getRowReverseDirection(),
+                position: 'absolute',
+                height: StyleSheet.flatten(generalStyles.SweetButton).height + 5,
+                bottom: 5,
+                zIndex: 3,
             },
-        defaultTopPhotoContainer:
-            {
-                width:'100%',
-                height:Window.width*0.5,
-                alignItems: 'center',
 
-                justifyContent: 'center',
-            },
-        defaultTopPhoto:
-            {
-                width:Window.width*0.35,
-                height:Window.width*0.35*0.756,
-            }
-    }
+    },
 );

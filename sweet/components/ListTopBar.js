@@ -7,37 +7,59 @@
 import React, { Component } from 'react';
 import {Text, View, Picker, TextInput, TouchableHighlight, Image} from 'react-native';
 import generalStyles from "../../styles/generalStyles";
+import ModalSelector from 'react-native-modal-selector';
+import SweetSelectorModal from './SweetSelectorModal';
+
 
 export default class ListTopBar extends Component<{}> {
+    state={
+      displaySortFieldSelect:false,
+    };
     render() {
         return (
-            <View style={generalStyles.listTopBar} flexDirection={'row'}>
-
-                <TouchableHighlight onPress={()=>{this.setState({displaySearchPage:true})}}
+            <View>
+            <View style={generalStyles.listTopBar}>
+                <TouchableHighlight onPress={() => {
+                    this.setState({displaySortFieldSelect:true});
+                }}
                                     activeOpacity={0.3}
-                                    underlayColor='#eee'>
-                    <View style={generalStyles.listTopBarItem}  flexDirection={'row'}>
-                        <View style={generalStyles.listTopBarItemButtonIconContainer} >
-                            <Image source={require('../../../../images/distance.png')} style={generalStyles.listTopBarItemButtonIcon} resizeMode={'stretch'}/>
-                        </View>
-                        <View style={generalStyles.listTopBarItemButtonIconContainerSelected} >
-                            <Image source={require('../../../../images/dollar.png')} style={generalStyles.listTopBarItemButtonIcon} resizeMode={'stretch'}/>
-                        </View>
-                        <Text style={generalStyles.listTopBarItemText} >مرتب سازی</Text>
-                        <Image source={require('../../../../images/sort.png')} style={generalStyles.listTopBarItemIcon} resizeMode={'stretch'}/>
+                                    underlayColor='#ffffff'>
+                    <View style={generalStyles.listTopBarItem}>
+                        <SweetSelectorModal
+                            options={this.props.sortFields}
+                            onValueChange={(option)=>{ this.props.onSortFieldSelect(option.key);}}
+                            onHideRequest={()=>{this.setState({displaySortFieldSelect:false});}}
+                            visible={this.state.displaySortFieldSelect}/>
+                        <Text style={generalStyles.listTopBarItemText}>مرتب سازی</Text>
+                        <Image source={require('../../images/sort.png')}
+                               style={generalStyles.listTopBarItemIcon} resizeMode={'stretch'}/>
                     </View>
-
                 </TouchableHighlight>
                 <TouchableHighlight onPress={this.props.onSearchClick}
                                     activeOpacity={0.3}
                                     underlayColor='#eee'>
-                    <View style={generalStyles.listTopBarItem}  flexDirection={'row'}>
+                    <View style={generalStyles.listTopBarItem}>
 
-                        <Text style={generalStyles.listTopBarItemText} >جستجو</Text>
-                        <Image source={require('../../../../images/filter.png')} style={generalStyles.listTopBarItemIcon} resizeMode={'stretch'}/>
+                        <Text style={generalStyles.listTopBarItemText}>جستجو</Text>
+                        <Image source={require('../../images/filter.png')}
+                               style={generalStyles.listTopBarItemIcon} resizeMode={'stretch'}/>
                     </View>
                 </TouchableHighlight>
-            </View>);
+            </View>
+                {this.props.displaySearchTitleBar &&
+                <View style={generalStyles.searchTitleTopBar}>
+                    <Text style={generalStyles.searchTitleTopBarText}>نتایج جستجو</Text>
+                    <TouchableHighlight style={generalStyles.searchTitleTopBarCancelIconContainer}
+                                        onPress={this.props.onCancelSearch}
+                                        activeOpacity={0.3}
+                                        underlayColor='#fff'>
+                        <Image source={require('../../images/cancel.png')}
+                               style={generalStyles.searchTitleTopBarCancelIcon} resizeMode={'stretch'}/>
+                    </TouchableHighlight>
+                </View>
+                }
+            </View>
+        );
     }
 }
 
