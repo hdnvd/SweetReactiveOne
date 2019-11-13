@@ -15,6 +15,7 @@ import VillaListController from '../../controllers/villaListController';
 import PageContainer from '../../../../sweet/components/PageContainer';
 import villaListStyles from '../../values/styles/villaListStyles';
 import SweetListPage from '../../../../sweet/components/SweetListPage';
+import StarBox from '../../../../sweet/components/StarBox';
 
 export default class trapp_villaList extends SweetListPage {
     state =
@@ -145,6 +146,7 @@ export default class trapp_villaList extends SweetListPage {
                     </View>
                     <Image style={generalStyles.listitemthumbnail}
                            source={item.photo != '' ? {uri: 'data:image/jpeg;base64,' + item.photo} : require('../../../../images/Logo.png')}/>
+                    <StarBox rate={item.rate} starStyle={villaListStyles.starstyle} style={villaListStyles.starBox}/>
                 </View>
             </TouchableWithoutFeedback>
         };

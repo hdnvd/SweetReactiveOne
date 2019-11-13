@@ -551,7 +551,7 @@ export default StyleSheet.create(
                 textAlign: 'right',
                 fontSize: 13,
                 fontFamily: 'IRANSansMobile',
-                width: '100%',
+                // width: '100%',
                 marginBottom: 10,
             },
         viewBox:
@@ -617,7 +617,10 @@ export default StyleSheet.create(
         viewBoxTitleBox:
             {
                 width:'100%',
-                alignItems: 'flex-end'
+                justifyContent: 'flex-start',
+                alignContent:'center',
+                // backgroundColor:"#ee0",
+                flexDirection:'row',
             },
     },
 

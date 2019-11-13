@@ -9,15 +9,7 @@ export default class TrappUser {
 
     static navigateToUserStartPage(navigation) {
         AsyncStorage.getItem('userroles').then((roles) => {
-            console.log("Role:" + roles);
-            if (roles == 'trapp_user')
-            {
-                console.log("trapp_user:" + roles);
-                // navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'));
-                navigation.dispatch(Navigation.resetNavigationAndNavigate('Trapp_villaSearchIndex'));
-            }
-
-            else if (roles == 'trapp_villaowner') {
+            if (roles == 'trapp_villaowner') {
                 console.log("trapp_villaowner:" + roles);
                 TrappUser.getUserFullInfo((data => {
                     let {places, villas,owners} = data;
@@ -36,7 +28,7 @@ export default class TrappUser {
                     {
                         global.placeId=places[0].id;
                         global.ownerId=owners[0].id;
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaManageNew'));
+                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaManage'));
                     }
                     else
                     {

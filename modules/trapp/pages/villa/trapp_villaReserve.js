@@ -17,6 +17,7 @@ export default class  trapp_villaReserve extends Component<{}> {
         super(props);
         this.state =
         {
+            ...super.state,
             isLoading:false,
             roomcount:'',
             duration:'1',
@@ -27,23 +28,12 @@ export default class  trapp_villaReserve extends Component<{}> {
             reservedDays:[],
         };
 
-        this.onDateChange = this.onDateChange.bind(this);
         this._loadData();
     }
-    onDateChange(date,type) {
-        // console.log("START"+date);
-        let DateString=jMoment.utc(date).format("jYYYY/jMM/jDD");
-        if(type==='START_DATE')
-            this.setState({ selectedStartDate: DateString ,selectedEndDate:null,selectedStartTimeStamp:date});
-        else
-        {
-            const dayLength=3600*24*1000;
-            let Duration=parseInt((date-this.state.selectedStartTimeStamp)/dayLength);
-            // console.log(parseInt(Duration));
-            this.CalculatePrice(this.state.selectedStartDate,Duration);
-            this.setState({selectedEndDate:DateString,duration:Duration+""});
-        }
 
+    onFullRangeSelect()
+    {
+        this.CalculatePrice(this.state.selectedStartDate,this.state.duration);
     }
     _loadData=()=>{
         let url1 = '/trapp/villa/'+global.villaID+'/reserveddays';

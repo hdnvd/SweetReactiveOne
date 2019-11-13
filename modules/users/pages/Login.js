@@ -27,6 +27,7 @@ import SweetCheckBox from "../../../sweet/components/SweetCheckBox";
 import SweetPage from '../../../sweet/components/SweetPage';
 import SweetConsole from '../../../classes/SweetConsole';
 import UserNavigator from '../classes/UserNavigator';
+import User from '../classes/User';
 
 export default class Login extends SweetPage {
     LOGINTYPE_NOTASKED=1;
@@ -95,32 +96,16 @@ export default class Login extends SweetPage {
             data.append('role', Constants.DefaultRole);
             new SweetFetcher().Fetch('/users/loginbyphone', SweetFetcher.METHOD_POST, data, data => {
                 SweetConsole.log(data);
-
-                let RolePart = ['userroles', ''];
-                if (!data.Data.roles.empty)
-                    RolePart = ['userroles', data.Data.roles[0]];
-
-                let AsyncStorageObject = [['sessionkey', data.Data.sessionkey], RolePart];
-
-                let access = Common.convertObjectPropertiesToLowerCase(data.Data.access);
-                let key, keys = Object.keys(access);
-                let n = keys.length;
-                while (n--) {
-                    key = keys[n];
-                    SweetConsole.log('access.' + access[key].name);
-                    AsyncStorageObject.push(['access.' + access[key].name, "1"]);
-                }
-                AsyncStorage.multiSet(AsyncStorageObject).then(result => {
-                    SweetConsole.log("HAAA");
+                User.saveUserData(data.Data.roles,data.Data.access,data.Data.sessionkey).then(result => {
+                    // SweetConsole.log("HAAA");
                     if (data.Data.sessionkey.length > 2) {
-                        UserMan.SaveToken(data.Data.sessionkey);
+                        // User.saveToken(data.Data.sessionkey);
                         this.setState({'token': data.Data.sessionkey});
                         global.isnewprofile = false;
                         OnEnd(true);
                         this.removeBackHandler();
                         // UserNavigator.navigateToUserStartPage(this.props.navigation);
                         UserNavigator.navigateToUserStartPage(this.props.navigation);
-
                         // TrappUser.navigateToUserStartPage(this.props.navigation);
                     }
                     else
@@ -140,6 +125,7 @@ export default class Login extends SweetPage {
 
     };
     render() {
+        User._setUserLoginStateInTemporaryGlobalFromToken(this.state.token);
         if(this.state.token=='')
         {
             return(
@@ -150,6 +136,7 @@ export default class Login extends SweetPage {
         }
         else if(this.state.token=='-1')
         {
+
             return (
                 <View style={styles.container}>
                     {this.state.loginType === this.LOGINTYPE_NOTASKED &&
@@ -283,6 +270,7 @@ export default class Login extends SweetPage {
         else
         {
             global.isnewprofile=false;
+
             // TrappUser.navigateToUserStartPage(this.props.navigation);
             UserNavigator.navigateToUserStartPage(this.props.navigation);
             return(<View/>);

@@ -1,5 +1,8 @@
 // @flow
 
+import Navigation from './navigation';
+import TrappUser from '../modules/trapp/classes/TrappUser';
+
 class Constants {
     static SERVERMODE_LARAVEL=1;
     static SERVERMODE_ASP=2;
@@ -26,7 +29,10 @@ class Constants {
     static Debugging=true;
     static BaseFontName="IRANSansMobile";
 
+    /*
     //Trapp User
+    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'))};
+    static userIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'))};
     static AppName="trapp_user";
     static DefaultRole="trapp_user";
     static BaseColor=Constants.UserBaseColor;
@@ -36,9 +42,10 @@ class Constants {
     static BaseIcon=require('../images/LogoWhite.png');
     static BaseIconText=require('../images/LogoText.png');
     static BaseTopMenuIcon=require('../images/LogoTextWhite.png');
-
-    /*
+    */
     //Trapp Owner
+    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'))};
+    static userIndexNavigationEvent=TrappUser.navigateToUserStartPage;
     static AppName="trapp_villaowner";
     static DefaultRole="trapp_villaowner";
     static BaseColor=Constants.OwnerBaseColor;
@@ -48,10 +55,12 @@ class Constants {
     static BaseIcon=require('../images/OwnerIcon.png');
     static BaseIconText=require('../images/ownerLogoText.png');
     static BaseTopMenuIcon=require('../images/LogoTextWhite.png');
-     */
+
 
     /*
     //CarFixRequest
+    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'))};
+    static userIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('carserviceorder_requestIndex'))};
     static AppName="CarFixRequest";
     static DefaultRole="trapp_user";
     static BaseColor=Constants.OwnerBaseColor;

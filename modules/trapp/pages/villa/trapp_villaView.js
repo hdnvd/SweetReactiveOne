@@ -9,7 +9,7 @@ import {
     Modal,
     TextInput,
     Button,
-    TouchableHighlight,
+    TouchableHighlight, BackHandler,
 } from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import Constants from '../../../../classes/Constants';
@@ -25,11 +25,22 @@ import SweetTopCarousel from '../../../../sweet/components/SweetTopCarousel';
 import ViewBox from '../../../../sweet/components/ViewBox';
 import {SceneMap, TabView} from 'react-native-tab-view';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import StarBox from '../../../../sweet/components/StarBox';
+import SwitchRow from '../../../../sweet/components/SwitchRow';
 let Window = Dimensions.get('window');
 export default class trapp_villaView extends SweetPage {
     componentDidMount(){
         super.componentDidMount();
         this.loadData();
+    }
+
+    setBackHandler() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.setState({isCommentSendModalVisible: false, SearchFields: null}, () => {
+                this._loadData(true, true);
+            });
+            return true;
+        });
     }
     state = {
         ...super.state,
@@ -41,6 +52,7 @@ export default class trapp_villaView extends SweetPage {
             { key: 'third', title: 'Third' },
             ],
             },
+            userRate:0,
             isCommentSendModalVisible:false,
             };
             loadData = () => {
@@ -137,17 +149,26 @@ export default class trapp_villaView extends SweetPage {
             const _SecondRoute = ()=>{
             return <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
             <View style={generalStyles.containerWithNoBG}>
-            <ViewBox style={VillaViewStyles.viewBox} title={'امکانات ویلا'} logo={require('../../values/files/images/icon/colored/option.png')}>
+            <ViewBox style={VillaViewStyles.viewBox} title={'امکانات ویژه ویلا'} logo={require('../../values/files/images/icon/colored/option.png')}>
             {
-                this.state.LoadedData.options.map(dt => {
-                    if (dt != null && dt.countnum>0) {
+                this.state.LoadedData.nonfreeoptions.map(dt => {
+                    if (dt != null) {
                         i = i + 1;
-                        return <TextRow key={i} style={generalStyles.semiRow}
-                                        title={'تعداد ' + dt.name} content={dt.countnum + ''}/>
+                        return <SwitchRow key={i} style={generalStyles.semiRow}
+                                        title={dt.name} content={dt.maxcountnum>0}/>
                     }
                 })}
             </ViewBox>
-
+                <ViewBox style={VillaViewStyles.viewBox} title={'دیگر امکانات ویلا'} logo={require('../../values/files/images/icon/colored/option.png')}>
+                    {
+                        this.state.LoadedData.options.map(dt => {
+                            if (dt != null ) {
+                                i = i + 1;
+                                return <TextRow key={i} style={generalStyles.semiRow}
+                                                title={dt.name} content={dt.countnum + ''}/>
+                            }
+                        })}
+                </ViewBox>
             </View>
             </ScrollView>;
         };
@@ -155,6 +176,7 @@ export default class trapp_villaView extends SweetPage {
             return <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
             <View style={generalStyles.containerWithNoBG}>
             <ViewBox style={VillaViewStyles.viewBox} title={'نظرات'} logo={require('../../values/files/images/icon/colored/option.png')}>
+                <StarBox/>
             {
                 this.state.LoadedData.comments.length>0 &&
 
@@ -235,7 +257,7 @@ export default class trapp_villaView extends SweetPage {
 
             </View>
             }
-                <Modal visible={this.state.isCommentSendModalVisible} transparent={true} animationType={'fade'}>
+                <Modal visible={this.state.isCommentSendModalVisible} transparent={true} animationType={'fade'} onRequestClose={()=>{this.setState({isCommentSendModalVisible:false});}}>
                     <TouchableHighlight activeOpacity={0}
                                         underlayColor='#fff'
                                         onPress={()=>{
@@ -250,19 +272,26 @@ export default class trapp_villaView extends SweetPage {
                             <View style={{backgroundColor:'#fff',borderRadius:10,padding:10,width:'80%',
                                 justifyContent: 'center',
                                 alignItems: 'center'}}>
-                                <TextInput placeholder={'نظر خود را بنویسید'} value={this.state.commentText==null?'':this.state.commentText} onChangeText={(text) =>{this.setState({commentText:text})}}/>
+                                <StarBox rate={this.state.userRate} onValueChange={(rate)=>{this.setState({userRate:rate})}}/>
+                                <TextInput style={VillaViewStyles.commentEditText} placeholder={'نظر خود را بنویسید'} value={this.state.commentText==null?'':this.state.commentText} onChangeText={(text) =>{this.setState({commentText:text})}}/>
                                 <SweetButton title={'ارسال نظر'} onPress={(onEnd)=>{
-                                    if(this.state.commentText!=null && this.state.commentText.length>2) {
-                                        VillaViewController.sendComment(global.villaID, this.state.commentText, 1, (data) => {
+                                    let textValidated=this.state.commentText!=null && this.state.commentText.length>2;
+                                    let rateValidated=this.state.userRate!=null && this.state.userRate>0;
+                                    if(textValidated && rateValidated) {
+                                        VillaViewController.sendComment(global.villaID, this.state.commentText, this.state.userRate, (data) => {
                                             SweetAlert.displaySimpleAlert("ارسال شد", 'نظر شما با موفقیت ثبت شد');
+                                            this.setState({isCommentSendModalVisible:false});
                                             onEnd(true);
                                         }, (error) => {
                                             onEnd(false)
                                         });
                                     }
-                                    else {
+                                    else if(!rateValidated) {
+                                        SweetAlert.displaySimpleAlert("توجه", 'لطفاامتیاز خود به این ویلا را انتخاب کنید');
+                                        onEnd(false);
+                                    }
+                                    else if(!textValidated) {
                                         SweetAlert.displaySimpleAlert("توجه", 'لطفا متن نظر خود را وارد کنید');
-
                                         onEnd(false);
                                     }
                                 }}/>

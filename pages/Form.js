@@ -9,6 +9,7 @@ import tenaciousFetch from 'tenacious-fetch';
 import ImagePicker from 'react-native-image-picker';
 
 import AsyncStorage from '@react-native-community/async-storage';
+import User from '../modules/users/classes/User';
 export default class FormView extends Component<{}> {
     constructor(props) {
         super(props);
@@ -572,7 +573,7 @@ export default class FormView extends Component<{}> {
                                                         {
 
                                                             global.token=res.token;
-                                                            UserMan.SaveToken(res.token);
+                                                            User.saveToken(res.token);
                                                             global.isnewprofile=false;
                                                             this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('MapPage'));
                                                         }

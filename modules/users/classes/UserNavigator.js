@@ -5,21 +5,26 @@ import SweetFetcher from "../../../classes/sweet-fetcher";
 import {AsyncStorage} from "react-native";
 import Navigation from "../../../classes/navigation";
 import TrappUser from '../../trapp/classes/TrappUser';
+import Constants from '../../../classes/Constants';
+import User from './User';
 
 export default class UserNavigator {
 
-    static navigateToUserStartPage(navigation) {
-        // TrappUser.navigateToUserStartPage(navigation);
-        // navigation.dispatch(Navigation.resetNavigationAndNavigate('carserviceorder_requestIndex'));
-        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'));
-        // navigation.dispatch(Navigation.resetNavigationAndNavigate('comments_commentManage'));
-
+    static async navigateToUserStartPage(navigation) {
+        global.isLoggedIn=false;
+        const returnToPrevious=navigation.getParam('returnToPrevious',false);
+        if(returnToPrevious)
+            navigation.goBack();
+        else {
+            User.getAsyncUserLoggedInState().then(isLoggedIn=>{
+                User._setUserLoginStateInTemporaryGlobal(isLoggedIn);
+                if(isLoggedIn)
+                    Constants.userIndexNavigationEvent(navigation);
+                else
+                    Constants.guestIndexNavigationEvent(navigation);
+            });
+        }
     }
 
-    static getUserFullInfo(onInfoLoaded) {
-        new SweetFetcher().Fetch('/trapp/userfullinfo', SweetFetcher.METHOD_GET, null, data => {
-            onInfoLoaded(data.Data);
-        });
-    }
 }
 

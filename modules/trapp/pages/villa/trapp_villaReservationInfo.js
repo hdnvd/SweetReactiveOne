@@ -34,11 +34,16 @@ import SweetDate from "../../../../classes/SweetDate";
 import LogoTitle from "../../../../components/LogoTitle";
 import SweetPage from "../../../../sweet/components/SweetPage";
 import SweetConsole from '../../../../classes/SweetConsole';
+import SweetCalendarSelectPage from '../../../../sweet/components/SweetCalendarSelectPage';
+import SweetAlert from '../../../../classes/SweetAlert';
+import SweetSelectorModal from '../../../../sweet/components/SweetSelectorModal';
+import trapp_villaReservationInfoController from '../../controllers/trapp_villaReservationInfoController';
 
 
-export default class trapp_villaReservationInfo extends SweetPage{
+export default class trapp_villaReservationInfo extends SweetCalendarSelectPage{
     state =
         {
+            ...super.state,
             orders: [],
             LastSearchFields: null,
             nextStartRow: 0,
@@ -47,8 +52,12 @@ export default class trapp_villaReservationInfo extends SweetPage{
             isRefreshing: false,
             displaySearchPage: false,
             reservedDays:[],
+            displayRangeActionSelect:false,
         };
-
+    onFullRangeSelect()
+    {
+        this.setState({displayRangeActionSelect:true});
+    }
     async componentDidMount() {
         this._loadData('', null, true);
     }
@@ -87,7 +96,7 @@ export default class trapp_villaReservationInfo extends SweetPage{
             });
         });
     };
-
+/****************************مدیریت ویلا*************************/
     render() {
         SweetConsole.log(this.state.reservedDays);
         // alert(SweetDate.getCurrentTimeJMomentFromDateTimeStamp('1560124800').format("jYYYY/jMM/jDD"));
@@ -97,13 +106,27 @@ export default class trapp_villaReservationInfo extends SweetPage{
                 <ImageBackground source={require('../../../../images/managementBG.png')} style={{width: '100%', height: '100%'}}>
 
                 <View style={generalStyles.listcontainer}>
+                    <SweetSelectorModal
+                        options={[{id:'1',title:'رزرو'},{id:'2',title:'ثبت یادداشت'}]}
+                        onValueChange={(option)=>{if(option.id=='1'){
+                            trapp_villaReservationInfoController.saveRangeServiceState(global.itemID,this.state.selectedStartDate,this.state.duration,false,(a)=>{},(a)=>{});
+                        }else{ SweetAlert.displaySimpleAlert("KEY:",option.id);}}}
+                        onHideRequest={()=>{this.setState({displayRangeActionSelect:false});}}
+                        visible={this.state.displayRangeActionSelect}/>
                     <View style={generalStyles.datepickercontainer}>
+
                         <PersianCalendarPicker
                             isRTL={true}
                             style={generalStyles.datepickercontainer}
                             scaleFactor={500}
                             onDateChange={this.onDateChange}
                             disabledDates={this.state.reservedDays}
+                            allowRangeSelection={true}
+                            customDatesStyles={this.state.reservedDays.map(dt=>{
+                                return {date:dt,textStyle:generalStyles.datepickerCustom}
+                            })}
+                            selectedRangeStartStyle={generalStyles.selectedStartDate}
+                            selectedRangeEndStyle={generalStyles.selectedEndDate}
                             textStyle={generalStyles.datepickertext}
                         />
                     </View>

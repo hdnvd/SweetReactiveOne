@@ -5,39 +5,36 @@
  */
 
 import React, { Component } from 'react';
-import {Text, View,TouchableHighlight,Modal} from 'react-native';
+import {Text, View, TouchableHighlight, Modal, TouchableOpacity} from 'react-native';
 import PickerBox from './PickerBox';
 
 export default class SweetSelectorModal extends PickerBox {
-    constructor(props)
-    {
-        super(props);
-    }
-    render() {
-        if(this.Options!=null && this.Options.length>0) {
-            this.OptionItems = this.Options.map(item => {
-                return <View style={{width:'100%'}}><TouchableHighlight
-                    activeOpacity={0}
-                    underlayColor='#fff'
-                    onPress={()=>{
-                        this.props.onHideRequest();
-                    if(this.props.onValueChange!=null)
-                    this.props.onValueChange(item[this.valueFieldName]);
-                }}>
-                    <View style={{width:'100%',borderBottomWidth:1,borderBottomColor:'#ccc',paddingVertical:10}}>
-                    <Text style={{width:'100%',
-                        fontSize: 15,
-                        justifyContent:'center',
-                        marginTop:5,
-                        color:'#000000',
-                        fontFamily: 'IRANSansMobile',
-                        textAlign:'center',}}>{item[this.titleFieldName]}</Text>
 
-                    </View>
-                </TouchableHighlight>
-                </View>
-            });
-        }
+    showEmptyTitle=false;
+    getItem=(item,itemTitle,itemValue)=>{
+        return <View style={{width:'100%'}}><TouchableHighlight
+            activeOpacity={0}
+            underlayColor='#fff'
+            onPress={()=>{
+                this.props.onHideRequest();
+                if(this.props.onValueChange!=null)
+                    this.props.onValueChange(item);
+            }}>
+            <View style={{width:'100%',borderBottomWidth:1,borderBottomColor:'#ccc',paddingVertical:10}}>
+                <Text style={{width:'100%',
+                    fontSize: 15,
+                    justifyContent:'center',
+                    marginTop:5,
+                    color:'#000000',
+                    fontFamily: 'IRANSansMobile',
+                    textAlign:'center',}}>{itemTitle}</Text>
+
+            </View>
+        </TouchableHighlight>
+        </View>;
+    };
+    render() {
+        let OptionViews=this.getItemViews();
         return (
             <Modal visible={this.props.visible} transparent={true} animationType={'fade'}>
                 <TouchableHighlight activeOpacity={0}
@@ -52,7 +49,7 @@ export default class SweetSelectorModal extends PickerBox {
                 <View style={{backgroundColor:'#fff',borderRadius:10,padding:10,width:'80%',
                     justifyContent: 'center',
                     alignItems: 'center'}}>
-                {this.OptionItems}
+                    {OptionViews}
                     <View style={{width:'100%'}}><TouchableHighlight
                         activeOpacity={0}
                         underlayColor='#fff'

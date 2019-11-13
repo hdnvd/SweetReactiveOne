@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ir.sweetsoft.trapp.user"
+        applicationId "ir.sweetsoft.trapp.owner"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -10,6 +10,7 @@ import LogoTitle from "../components/LogoTitle";
 import Navigation from "../classes/navigation";
 import Constants from "../classes/Constants";
 import SweetFetcher from '../classes/sweet-fetcher';
+import UserNavigator from '../modules/users/classes/UserNavigator';
 
 export default class Splash extends Component<{}> {
 
@@ -26,7 +27,7 @@ export default class Splash extends Component<{}> {
             global.provinces=data.Data;
 
             this.timeoutHandle = setTimeout(()=>{
-                this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'));
+                UserNavigator.navigateToUserStartPage(this.props.navigation);
             }, 1000);
         });
 

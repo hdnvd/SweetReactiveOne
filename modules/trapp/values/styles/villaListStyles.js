@@ -4,6 +4,22 @@ import Localization from '../../../../classes/Localization';
 let Window = Dimensions.get('window');
 export default StyleSheet.create(
     {
+        starstyle:
+            {
+                height: 20,
+                width: 20,
+                marginHorizontal:3,
+            },
+        starBox:
+            {
+              // alignSelf:'flex-end',
+                width:Window.width*0.40,
+                alignItems:'center',
+                justifyContent:'center',
+                position: 'absolute',
+                top:30+Window.width*0.40+10,
+                right:10,
+            },
         ItemLogo:
             {
                 height: Window.width * 0.05,

@@ -3,6 +3,12 @@ import {Dimensions} from 'react-native';
 
 let Window = Dimensions.get('window');
 export default {
+    loginBar:{
+      width:'100%',
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems:'center',
+    },
     container: {
         paddingTop: 20,
         flex: 1,

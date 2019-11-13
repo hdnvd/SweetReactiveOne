@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="ir.sweetsoft.trapp.user">
+  package="ir.sweetsoft.trapp.owner">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-      android:name="ir.sweetsoft.trapp.user.MainApplication"
+      android:name="ir.sweetsoft.trapp.owner.MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,7 +23,7 @@
                 android:name="com.google.android.maps.v2.API_KEY"
                 android:value="AIzaSyDBJuBKuj-mXqRwyjUnXDctaMZC07Sk14U" />
       <activity
-        android:name="ir.sweetsoft.trapp.user.MainActivity"
+        android:name="ir.sweetsoft.trapp.owner.MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustPan">

@@ -9,22 +9,13 @@ import { DrawerActions } from 'react-navigation';
 
 import {createStackNavigator, StackNavigator} from 'react-navigation';
 import IOSIcon from "react-native-vector-icons/Ionicons";
-import trapp_villaownerManage from '../../modules/trapp/pages/villaowner/trapp_villaownerManage'
-import trapp_villaList from '../../modules/trapp/pages/villa/trapp_villaList'
 import Splash from "../../pages/Splash";
 import Login from "../../modules/users/pages/Login";
-import trapp_villaReservationInfo from "../../modules/trapp/pages/villa/trapp_villaReservationInfo";
-import trapp_orderList from "../../modules/trapp/pages/order/trapp_orderList";
-import trapp_villaManageNew from "../../modules/trapp/pages/villa/trapp_villaManageNew";
 import placeman_placeManage from "../../modules/placeman/pages/place/placeman_placeManage";
 import placeman_placeView from "../../modules/placeman/pages/place/placeman_placeView";
 import placeman_placeList from "../../modules/placeman/pages/place/placeman_placeList";
 import placeman_placePhotoManage from "../../modules/placeman/pages/placephoto/placeman_placephotoManage";
-import trapp_villaownerList from "../../modules/trapp/pages/villaowner/trapp_villaownerList";
-import trapp_villaownerView from "../../modules/trapp/pages/villaowner/trapp_villaownerView";
-import trapp_villaView from "../../modules/trapp/pages/villa/trapp_villaView";
-import trapp_villaReserve from "../../modules/trapp/pages/villa/trapp_villaReserve";
-import Trapp_villaSearchIndex from "../../modules/trapp/pages/villa/Trapp_villaSearchIndex";
+
 import sas_unitList from "../../modules/sas/pages/unit/sas_unitList";
 import sas_unitManage from "../../modules/sas/pages/unit/sas_unitManage";
 import MapPage from "../../pages/MapPage";
@@ -35,9 +26,9 @@ import SelectLocation from "../../pages/SelectLocation";
 import PlaceVerification from "../../pages/PlaceVerification";
 import LogoTitle from "../LogoTitle";
 import Common from "../../classes/Common";
-import trapp_villaoptionManage from "../../modules/trapp/pages/villaoption/trapp_villaoptionManage";
 import carserviceorderRoutes from '../../modules/carserviceorder/routes/carserviceorderRoutes';
 import commentsRoutes from '../../modules/comments/routes/commentsRoutes';
+import trappRoutes from '../../modules/trapp/routes/trappRoutes';
 const navOptions =({navigation}) => {
     return {
         headerLeft: null,
@@ -74,7 +65,10 @@ const PageToRoute=(InitialRoute,theObject)=>
     let resultArray=InitialRoute;
     while (n<keys.length) {
         key = keys[n];
-        resultArray[key]={screen:theObject[key],navigationOptions:navOptions};
+        if(theObject[key].screen!=null && theObject[key].screenTitle!=null)
+            resultArray[key]={screen:theObject[key].screen,navigationOptions:getNavOptionsMenuFromTitle(theObject[key].screenTitle)};
+        else
+            resultArray[key]={screen:theObject[key],navigationOptions:navOptions};
         n++;
     }
     return resultArray;
@@ -82,23 +76,12 @@ const PageToRoute=(InitialRoute,theObject)=>
 let initialRoute={
     Splash:{screen:Splash,navigationOptions:navOptionsWithNoMenu},
     Login:{screen:Login,navigationOptions:navOptionsWithNoMenu},
-    trapp_villaoptionManage: {screen:trapp_villaoptionManage,navigationOptions:getNavOptionsMenuFromTitle('امکانات ویلا')},
-    trapp_villaownerManage: {screen:trapp_villaownerManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات صاحب ویلا')},
-    trapp_villaManage: {screen:trapp_villaManageNew,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات ویلا')},
     placeman_placeManage: {screen:placeman_placeManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات مکان ویلا')},
     placeman_placePhotoManage: {screen:placeman_placePhotoManage,navigationOptions:getNavOptionsMenuFromTitle('تصاویر ویلا')},
 };
 const Pages={
-    trapp_villaReservationInfo: trapp_villaReservationInfo,
-    trapp_orderList: trapp_orderList,
     placeman_placeView:  placeman_placeView,
     placeman_placeList:  placeman_placeList,
-    trapp_villaownerList:  trapp_villaownerList,
-    trapp_villaownerView:  trapp_villaownerView,
-    trapp_villaView: trapp_villaView,
-    trapp_villaReserve:  trapp_villaReserve,
-    trapp_villaList:  trapp_villaList,
-    Trapp_villaSearchIndex:  Trapp_villaSearchIndex,
     sas_unitList:  sas_unitList,
     sas_unitManage: sas_unitManage,
     MapPage:  MapPage,
@@ -107,7 +90,7 @@ const Pages={
     ManageBranch:  ManageBranch,
     SelectLocation:  SelectLocation,
 };
-var AllPages = Object.assign({}, Pages, carserviceorderRoutes,commentsRoutes);
+var AllPages = Object.assign({}, Pages, carserviceorderRoutes,commentsRoutes,trappRoutes);
 let Routes=PageToRoute(initialRoute,AllPages);
 // console.log(Routes);
 const stackNav =createStackNavigator(Routes);

@@ -8,6 +8,13 @@ let BaseColor = Constants.BaseColor;
 let Window = Dimensions.get('window');
 export default StyleSheet.create(
     {
+        commentEditText:
+            {
+                fontFamily: Constants.BaseFontName,
+                width:'100%',
+                direction: 'rtl',
+                textAlign: 'right',
+            },
         tabViewTopBar:
             {
                 width: '100%',

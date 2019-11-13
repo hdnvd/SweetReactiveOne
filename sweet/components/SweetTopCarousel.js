@@ -61,12 +61,12 @@ export default class SweetTopCarousel extends Component<{}> {
         }
         return (
             <View>
-                <Modal visible={this.state.isImageViewVisible} transparent={true}>
+                <Modal visible={this.state.isImageViewVisible} transparent={true} animationType={'fade'} onRequestClose={()=>{this.setState({isImageViewVisible: false});}}>
                     <ImageViewer imageUrls={this.props.data.map(item=>{
                         item.url=this.urlPrefix+item[this.urlField];
                         return item;
                     })} onClick={() => {
-                        this.setState({isImageViewVisible: false})
+                        this.setState({isImageViewVisible: false});
                     }}/>
                 </Modal>
 

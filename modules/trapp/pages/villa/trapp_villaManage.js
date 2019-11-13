@@ -87,7 +87,7 @@ export default class  trapp_villaManage extends SweetPage {
                     <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
                         <View style={generalStyles.container}>
 
-                            <TextBox keyboardType='numeric' title={'تعداد اتاق'} value={this.state.roomcountnum} onChangeText={(text) => {this.setState({formData:{...this.state.formData,roomcountnum: text}});}}/>
+                            <TextBox keyboardType='numeric' title={'تعداد اتاق'} value={this.state.roomcountnum} onChangeText={(text) => {this.setState({roomcountnum: text});}}/>
                             <TextBox keyboardType='numeric' title={'ظرفیت به نفر'} value={this.state.capacitynum} onChangeText={(text) => {this.setState({capacitynum: text});}}/>
                             <TextBox keyboardType='numeric' title={'حداکثر تعداد مهمان'} value={this.state.maxguestsnum} onChangeText={(text) => {this.setState({maxguestsnum: text});}}/>
                             <TextBox keyboardType='numeric' title={'متراژ بنا'} value={this.state.structureareanum} onChangeText={(text) => {this.setState({structureareanum: text});}}/>

@@ -27,6 +27,7 @@ const App = createDrawerNavigator({
     contentComponent: SideMenu,
     drawerWidth: Dimensions.get('window').width - 120,
 });
+
 global.usertype = 1;//Branch Admins
 console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
 export default App;

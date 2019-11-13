@@ -45,7 +45,10 @@ export default class PickerBox extends Component<{}> {
             EmptyItemTitle='انتخاب کنید';
         if(this.showEmptyTitle && Options!=null)
         {
-            OptionViews=[this.getItem({},EmptyItemTitle,'-1'),...OptionViews];
+            if(OptionViews===null)
+                OptionViews=[this.getItem({},EmptyItemTitle,'-1')];
+            else
+                OptionViews=[this.getItem({},EmptyItemTitle,'-1'),...OptionViews];
         }
         else if(Options==null) {
             OptionViews = [this.getItem({},this.props.title,'-1')];
