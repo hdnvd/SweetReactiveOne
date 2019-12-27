@@ -48,7 +48,6 @@ onSelect= () =>
       },err=>{
           SweetConsole.log(err.message);
               SweetAlert.displaySimpleAlert('پیام','لطفا GPS گوشی خود را روشن کنید.');
-          // Alert.alert('error:'+err.message)
       },
     {
       timeout:10000

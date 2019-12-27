@@ -17,10 +17,11 @@ import SweetHttpRequest from '../../../../classes/sweet-http-request';
 import SweetPage from '../../../../sweet/components/SweetPage';
 import jMoment from 'moment-jalaali';
 import moment from 'moment';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 
 export default class placeman_placephotoList extends SweetPage {
-    
+
     static navigationOptions =({navigation}) => {
         return {
             headerLeft: null,
@@ -88,10 +89,10 @@ export default class placeman_placephotoList extends SweetPage {
                         renderItem={({item}) =>
                         <TouchableWithoutFeedback onPress={() => {
                                 global.itemID=item.id;
-                                this.props.navigation.navigate('placeman_placephotoManage', { name: 'placeman_placephotoManage' });
+                            SweetNavigation.navigateToNormalPage(this.props.navigation,'placeman_placephotoManage');
                             }}>
                             <View style={generalStyles.ListItem}>
-                            
+
                 <Text style={generalStyles.simplelabel}>{item.name}</Text>
                 <Image style={generalStyles.listitemthumbnail} source={{uri: Constants.ServerURL+'/'+item.photoigu}}/>
 
@@ -108,4 +109,3 @@ export default class placeman_placephotoList extends SweetPage {
             );
     }
 }
-    

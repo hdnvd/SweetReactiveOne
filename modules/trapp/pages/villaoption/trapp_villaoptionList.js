@@ -18,6 +18,7 @@ import SweetPage from '../../../../sweet/components/SweetPage';
 import LogoTitle from '../../../../components/LogoTitle';
 import jMoment from 'moment-jalaali';
 import moment from 'moment';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 
 export default class trapp_villaoptionList extends SweetPage {
@@ -88,10 +89,10 @@ export default class trapp_villaoptionList extends SweetPage {
                         renderItem={({item}) =>
                         <TouchableWithoutFeedback onPress={() => {
                                 global.itemID=item.id;
-                                this.props.navigation.navigate('trapp_villaoptionManage', { name: 'trapp_villaoptionManage' });
-                            }}>
+                            SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaoptionManage');
+                         }}>
                             <View style={generalStyles.ListItem}>
-                            
+
                 <Text style={generalStyles.simplelabel}>{item.villacontent}</Text>
                 <Text style={generalStyles.simplelabel}>{item.optioncontent}</Text>
                             </View>
@@ -105,4 +106,3 @@ export default class trapp_villaoptionList extends SweetPage {
             );
     }
 }
-    

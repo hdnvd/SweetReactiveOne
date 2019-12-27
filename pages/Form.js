@@ -3,7 +3,7 @@ import RNFileSelector from 'react-native-file-selector';
 import { Button } from 'react-native-elements';
 import UserMan from "../classes/userman";
 import {StyleSheet, View, Alert, TextInput, ScrollView, Dimensions,Picker,Text } from 'react-native';
-import Navigation from "../classes/navigation";
+import SweetNavigation from "../classes/sweetNavigation";
 import generalStyles from "../styles/generalStyles";
 import tenaciousFetch from 'tenacious-fetch';
 import ImagePicker from 'react-native-image-picker';
@@ -575,7 +575,7 @@ export default class FormView extends Component<{}> {
                                                             global.token=res.token;
                                                             User.saveToken(res.token);
                                                             global.isnewprofile=false;
-                                                            this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('MapPage'));
+                                                            this.props.navigation.dispatch(SweetNavigation.resetAndNavigateToNormalPage(this.props.navigation,'MapPage'));
                                                         }
                                                     }
                                                     else if(res.hasOwnProperty("errors"))

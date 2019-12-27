@@ -8,6 +8,7 @@ import React, {Component} from 'react';
 import {Picker, Text, View} from 'react-native';
 import generalStyles from '../../styles/generalStyles';
 import PlaceManager from '../../modules/placeman/classes/PlaceManager';
+import PickerBox from './PickerBox';
 
 export default class CityAreaSelector extends Component<{}> {
     placemanager = new PlaceManager();
@@ -16,18 +17,20 @@ export default class CityAreaSelector extends Component<{}> {
         this.state =
             {
                 infoLoaded: false,
-                provinceOptions: [<Picker.Item label='استان' value='-1' style={generalStyles.pickerItem}/>],
-                cityOptions: [<Picker.Item label='شهر' value='-1' style={generalStyles.pickerItem}/>],
-                areaOptions: [<Picker.Item label='منطقه' value='-1' style={generalStyles.pickerItem}/>],
+                provinceOptions: [],
+                cityOptions: [],
+                areaOptions: [],
                 selectedProvinceValue: -1,
                 selectedCityValue: -1,
                 selectedAreaValue: -1,
+
             };
 
         this.placemanager.onProvincesLoaded = (ProvinceOptions, Provinces) => {
-            const provinceID = (Provinces != null && Provinces.length > 0) ? Provinces[0].id : -1;
+            let provinceID = (Provinces != null && Provinces.length > 0) ? Provinces[0].id : -1;
+            provinceID=-1;
             this.setState({
-                provinceOptions: ProvinceOptions,
+                provinceOptions: Provinces,
                 selectedProvinceValue: provinceID,
                 selectedCityValue: -1,
             }, () => {
@@ -35,8 +38,9 @@ export default class CityAreaSelector extends Component<{}> {
             });
         };
         this.placemanager.onCitiesLoaded = (CityOptions, Cities) => {
-            const cityID = (Cities != null && Cities.length > 0) ? Cities[0].id : -1;
-            this.setState({cityOptions: CityOptions, selectedCityValue: cityID, selectedAreaValue: -1}, () => {
+            let cityID = (Cities != null && Cities.length > 0) ? Cities[0].id : -1;
+            cityID=-1;
+            this.setState({cityOptions: Cities, selectedCityValue: cityID, selectedAreaValue: -1}, () => {
                 this.placemanager.loadAreaOptions(this.state.selectedProvinceValue, cityID);
                 if (this.props.onCitySelected != null) {
                     this.props.onCitySelected(cityID);
@@ -44,8 +48,9 @@ export default class CityAreaSelector extends Component<{}> {
             });
         };
         this.placemanager.onAreasLoaded = (AreaOptions, Areas) => {
-            const AreaID = (Areas != null && Areas.length > 0) ? Areas[0].id : -1;
-            this.setState({areaOptions: AreaOptions, selectedAreaValue: AreaID}, () => {
+            let AreaID = (Areas != null && Areas.length > 0) ? Areas[0].id : -1;
+            AreaID=-1;
+            this.setState({areaOptions: Areas, selectedAreaValue: AreaID}, () => {
                 if (this.props.onAreaSelected != null) {
                     this.props.onAreaSelected(AreaID);
                 }
@@ -62,8 +67,9 @@ export default class CityAreaSelector extends Component<{}> {
     render() {
         return (<View>
             <View>
-                <Text style={generalStyles.inputLabel}>استان</Text>
-                <Picker style={generalStyles.select}
+                <PickerBox style={generalStyles.select}
+                           title={'استان'}
+                           isOptional={false}
                         name='placemanprovinces'
                         selectedValue={this.state.selectedProvinceValue}
                         onValueChange={
@@ -73,18 +79,21 @@ export default class CityAreaSelector extends Component<{}> {
                                     selectedCityValue: -1,
                                     selectedAreaValue: -1,
                                 }, () => {
+                                    if (this.props.onProvinceSelected != null) {
+                                        this.props.onProvinceSelected(ProvinceID);
+                                    }
                                     this.placemanager.loadCityOptions(ProvinceID);
                                 });
                             }
                         }
-                >
-                    {this.state.provinceOptions}
-                </Picker>
+                           options={this.state.provinceOptions}
+                />
             </View>
             <View>
-                <Text style={generalStyles.inputLabel}>شهر</Text>
-                <Picker style={generalStyles.select}
+                <PickerBox style={generalStyles.select}
                         name='placemancities'
+                           title='شهر'
+                           isOptional={true}
                         selectedValue={this.state.selectedCityValue}
                         onValueChange={(CityID, index) => {
                             this.setState({selectedCityValue: CityID, selectedAreaValue: -1}, () => {
@@ -94,14 +103,14 @@ export default class CityAreaSelector extends Component<{}> {
                                 }
                             });
                         }}
-                >
-                    {this.state.cityOptions}
-                </Picker>
+                           options={this.state.cityOptions}
+                />
             </View>
             {(this.props.displayAreaSelect == null || this.props.displayAreaSelect == true) &&
             <View>
-                <Text style={generalStyles.inputLabel}>منطقه</Text>
-                <Picker style={generalStyles.select}
+                <PickerBox style={generalStyles.select}
+                           title={'منطقه'}
+                           isOptional={true}
                         name='placemanareas'
                         selectedValue={this.state.selectedAreaValue}
                         onValueChange={(AreaID, index) => {
@@ -110,9 +119,8 @@ export default class CityAreaSelector extends Component<{}> {
                             });
 
                         }}
-                >
-                    {this.state.areaOptions}
-                </Picker>
+                           options={this.state.areaOptions}
+                />
             </View>
             }
         </View>);

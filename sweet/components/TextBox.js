@@ -15,7 +15,7 @@ export default class TextBox extends Component<{}> {
                 <Text style={this.props.labelStyle!=null?this.props.labelStyle:generalStyles.inputLabel}>{this.props.title}</Text>
                 <TextInput keyboardType={this.props.keyboardType} placeholder=''  underlineColorAndroid={'transparent'} style={this.props.textStyle!=null?this.props.textStyle:generalStyles.input} onChangeText={(text) =>{this.props.onChangeText(text)} }
                            allowFontScaling={false}
-                           value={this.props.value} {...this.props} />
+                           value={(this.props.value===undefined||this.props.value===null)?'':this.props.value} {...this.props} />
             </View>);
     }
 }

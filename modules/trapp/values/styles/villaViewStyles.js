@@ -15,10 +15,16 @@ export default StyleSheet.create(
                 direction: 'rtl',
                 textAlign: 'right',
             },
+            commentItemContainer:
+                {
+                  borderBottomWidth:1,
+                  borderBottomColor:'rgba(42,136,0,1)',
+                        width:'100%',
+                },
         tabViewTopBar:
             {
                 width: '100%',
-                backgroundColor: Constants.BaseColor,
+                backgroundColor: BaseColor,
                 height: Window.height * 0.07,
                 flexDirection: 'row-reverse',
                 justifyContent: 'center',

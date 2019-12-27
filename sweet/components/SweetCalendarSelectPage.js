@@ -14,6 +14,7 @@ export default class SweetCalendarSelectPage extends SweetPage {
             selectedStartDate: null,
             selectedStartTimeStamp: null,
             selectedEndDate: null,
+            selectedEndTimeStamp:null,
             isLoading: false,
         };
     constructor(props) {
@@ -27,7 +28,8 @@ export default class SweetCalendarSelectPage extends SweetPage {
     }
     onDateChange(date,type) {
         // console.log("START"+date);
-        let DateString=jMoment.utc(date).format("jYYYY/jMM/jDD");
+        let DateTime=jMoment.utc(date);
+        let DateString=DateTime.format("jYYYY/jMM/jDD");
         if(type==='START_DATE')
             this.setState({ selectedStartDate: DateString ,selectedEndDate:null,selectedStartTimeStamp:date});
         else
@@ -36,7 +38,7 @@ export default class SweetCalendarSelectPage extends SweetPage {
             let Duration=parseInt((date-this.state.selectedStartTimeStamp)/dayLength);
             // console.log(parseInt(Duration));
 
-            this.setState({selectedEndDate:DateString,duration:Duration+""},()=>{
+            this.setState({selectedEndDate:DateString,duration:Duration+"",selectedEndTimeStamp:date},()=>{
                 this.onFullRangeSelect();
             });
         }

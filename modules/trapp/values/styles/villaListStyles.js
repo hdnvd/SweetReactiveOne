@@ -4,6 +4,15 @@ import Localization from '../../../../classes/Localization';
 let Window = Dimensions.get('window');
 export default StyleSheet.create(
     {
+        listitemthumbnailTop:
+            {
+              width: Window.width*0.28*228/209,
+              height:Window.width*0.28,
+                position:'absolute',
+                top:25,
+                right:5,
+                zIndex:3,
+            },
         starstyle:
             {
                 height: 20,

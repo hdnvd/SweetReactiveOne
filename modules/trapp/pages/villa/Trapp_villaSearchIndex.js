@@ -14,6 +14,7 @@ import villaSearchIndexStyles from '../../values/styles/villaSearchIndexStyles';
 import SweetDatePickerModal from '../../../../sweet/components/SweetDatePickerModal';
 import PlaceManager from '../../../placeman/classes/PlaceManager';
 import SweetAlert from '../../../../classes/SweetAlert';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 export default class Trapp_villaSearchIndex extends Component<{}> {
     state =
@@ -46,7 +47,7 @@ export default class Trapp_villaSearchIndex extends Component<{}> {
     render() {
         let data = null;
         if (global.provinces != null && this.state.findText.length>1) {
-            data =PlaceManager.findPlaces(this.state.findText);
+            data =PlaceManager.findPlaces(this.state.findText,true,true,true);
         }
         let Window = Dimensions.get('window');
         return (<View style={{flex: 1}}>
@@ -216,7 +217,7 @@ export default class Trapp_villaSearchIndex extends Component<{}> {
 
                                              const dayLength=3600*24*1000;
                                              let Duration=parseInt((this.state.selectedEndTimeStamp-this.state.selectedStartTimeStamp)/dayLength);
-                                             this.props.navigation.navigate('trapp_villaList', {name: 'trapp_villaList',
+                                             SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaList', {
                                                  selectedCityValue:this.state.selectedCityID,
                                                  selectedProvinceValue:this.state.selectedProvinceID,
                                                  selectedStartDate:this.state.startdate,

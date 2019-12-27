@@ -133,6 +133,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -162,6 +164,11 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    lintOptions {
+        tasks.lint.enabled = false
+        checkReleaseBuilds false
+    }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -177,14 +184,7 @@ android {
         }
     }
 
-    packagingOptions {
-        pickFirst '**/armeabi-v7a/libc++_shared.so'
-        pickFirst '**/x86/libc++_shared.so'
-        pickFirst '**/arm64-v8a/libc++_shared.so'
-        pickFirst '**/x86_64/libc++_shared.so'
-        pickFirst '**/x86/libjsc.so'
-        pickFirst '**/armeabi-v7a/libjsc.so'
-    }
+
 }
 repositories {
     maven {
@@ -196,6 +196,7 @@ dependencies {
     implementation project(':react-native-file-selector')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
+
     implementation "com.facebook.react:react-native:+"  // From node_modules
 implementation(project(':react-native-maps')){
                exclude group: 'com.google.android.gms', module: 'play-services-base'
@@ -204,12 +205,14 @@ implementation(project(':react-native-maps')){
            implementation 'com.google.android.gms:play-services-base:16.0.1'
            implementation 'com.google.android.gms:play-services-maps:16.0.0'
            implementation "com.google.android.gms:play-services-location:16.0.0"
+               androidTestImplementation('com.wix:detox:+') { transitive = true }
+                androidTestImplementation 'junit:junit:4.12'
 
 
     if (enableHermes) {
-      def hermesPath = "../../node_modules/hermesvm/android/";
-      debugImplementation files(hermesPath + "hermes-debug.aar")
-      releaseImplementation files(hermesPath + "hermes-release.aar")
+    def hermesPath = "../../node_modules/hermes-engine/android/";
+            debugImplementation files(hermesPath + "hermes-debug.aar")
+            releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
       implementation jscFlavor
     }

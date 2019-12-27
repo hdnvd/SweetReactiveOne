@@ -10,6 +10,7 @@ import generalStyles from "../../styles/generalStyles";
 import {CheckBox} from "react-native-elements";
 import Constants from "../../classes/Constants";
 import TextRow from "./TextRow";
+import SweetAlert from '../../classes/SweetAlert';
 
 export default class PhotoManageBox extends Component<{}> {
     render() {
@@ -17,7 +18,7 @@ export default class PhotoManageBox extends Component<{}> {
             console.log(Constants.ServerURL+'/'+dt.url);
             return (
                 <View style={generalStyles.photomanagephotocontainer}>
-                    <TouchableHighlight onPress={dt.onDelete} style={generalStyles.photomanagedeleteiconcontainer}>
+                    <TouchableHighlight onPress={()=>{SweetAlert.displayDeleteAlert(dt.onDelete)}} style={generalStyles.photomanagedeleteiconcontainer}>
                         <Image style={generalStyles.photomanagedeleteicon} source={require('../../images/delete.png')}/>
                     </TouchableHighlight>
                     <Image style={generalStyles.photomanagephoto} source={{uri: Constants.ServerURL+'/'+dt.url}}/>

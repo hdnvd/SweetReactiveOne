@@ -1,6 +1,18 @@
 import React, {Component} from 'react'
 import { CheckBox } from 'react-native-elements';
-import {StyleSheet, View, Alert, TextInput, ScrollView, Dimensions,AsyncStorage,Picker,Text,Image } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Alert,
+    TextInput,
+    ScrollView,
+    Dimensions,
+    AsyncStorage,
+    Picker,
+    Text,
+    Image,
+    TouchableOpacity,
+} from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import SweetFetcher from '../../../../classes/sweet-fetcher';
 import Common from '../../../../classes/Common';
@@ -17,6 +29,8 @@ import CheckedRow from '../../../../sweet/components/CheckedRow';
 import ComponentHelper from '../../../../classes/ComponentHelper';
 import LogoTitle from "../../../../components/LogoTitle";
 import SweetPage from "../../../../sweet/components/SweetPage";
+import SweetNavigation from '../../../../classes/sweetNavigation';
+import TrappUser from '../../classes/TrappUser';
 
 export default class  trapp_villaManage extends SweetPage {
     static navigationOptions =({navigation}) => {
@@ -29,6 +43,7 @@ export default class  trapp_villaManage extends SweetPage {
         super(props);
         this.state =
         {
+            documentphotoiguPreview:'',
             isLoading:false,
             formData:{},
 			roomcountnum:'',
@@ -47,6 +62,7 @@ export default class  trapp_villaManage extends SweetPage {
 			SelecteddocumentphotoiguLocation:'',
 			normalpriceprc:'',
 			holidaypriceprc:'',
+			discountnum:'',
 			weeklyoffnum:'',
 			monthlyoffnum:'',
             allOptions:{
@@ -69,7 +85,16 @@ export default class  trapp_villaManage extends SweetPage {
             this.setState({isLoading:true});
             new SweetFetcher().Fetch('/trapp/villa/'+global.itemID,SweetFetcher.METHOD_GET, null, data => {
                 data.Data.isLoading=false;
-                this.setState({formData:data.Data,roomcountnum:data.Data.roomcountnum,capacitynum:data.Data.capacitynum,maxguestsnum:data.Data.maxguestsnum,structureareanum:data.Data.structureareanum,totalareanum:data.Data.totalareanum,SelectedplacemanplaceValue:data.Data.placemanplace,addedbyowner:data.Data.addedbyowner,SelectedviewtypeValue:data.Data.viewtype,SelectedstructuretypeValue:data.Data.structuretype,fulltimeservice:data.Data.fulltimeservice,timestartclk:data.Data.timestartclk,SelectedowningtypeValue:data.Data.owningtype,SelectedareatypeValue:data.Data.areatype,descriptionte:data.Data.descriptionte,documentphotoigu:data.Data.documentphotoigu,normalpriceprc:data.Data.normalpriceprc,holidaypriceprc:data.Data.holidaypriceprc,weeklyoffnum:data.Data.weeklyoffnum,monthlyoffnum:data.Data.monthlyoffnum,});
+                this.setState({formData:data.Data,roomcountnum:data.Data.roomcountnum
+                    ,capacitynum:data.Data.capacitynum,maxguestsnum:data.Data.maxguestsnum
+                    ,structureareanum:data.Data.structureareanum,totalareanum:data.Data.totalareanum
+                    ,SelectedplacemanplaceValue:data.Data.placemanplace,addedbyowner:data.Data.addedbyowner
+                    ,SelectedviewtypeValue:data.Data.viewtype,SelectedstructuretypeValue:data.Data.structuretype
+                    ,fulltimeservice:data.Data.fulltimeservice,timestartclk:data.Data.timestartclk
+                    ,SelectedowningtypeValue:data.Data.owningtype,SelectedareatypeValue:data.Data.areatype
+                    ,descriptionte:data.Data.descriptionte,documentphotoigu:data.Data.documentphotoigu
+                    ,normalpriceprc:data.Data.normalpriceprc,holidaypriceprc:data.Data.holidaypriceprc
+                    ,discountnum:data.Data.discountnum,weeklyoffnum:data.Data.weeklyoffnum,monthlyoffnum:data.Data.monthlyoffnum,});
              });
         }//IF
     };
@@ -85,8 +110,9 @@ export default class  trapp_villaManage extends SweetPage {
             <View style={{flex:1}}  >
                 <View style={{flex:1}}>
                     <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
-                        <View style={generalStyles.container}>
 
+                        <View style={generalStyles.container}>
+                            <TouchableOpacity><View>
                             <TextBox keyboardType='numeric' title={'تعداد اتاق'} value={this.state.roomcountnum} onChangeText={(text) => {this.setState({roomcountnum: text});}}/>
                             <TextBox keyboardType='numeric' title={'ظرفیت به نفر'} value={this.state.capacitynum} onChangeText={(text) => {this.setState({capacitynum: text});}}/>
                             <TextBox keyboardType='numeric' title={'حداکثر تعداد مهمان'} value={this.state.maxguestsnum} onChangeText={(text) => {this.setState({maxguestsnum: text});}}/>
@@ -139,12 +165,21 @@ export default class  trapp_villaManage extends SweetPage {
                             <ImageSelector title='انتخاب سند مالکیت' onConfirm={(path,onEnd)=>{
                                 onEnd(true);
                                 this.setState({SelecteddocumentphotoiguLocation : path});
-                            }} />
-                            <TextBox keyboardType='numeric' title={'قیمت در روزهای عادی(ریال)'} value={this.state.normalpriceprc+''} onChangeText={(text) => {this.setState({normalpriceprc: text});}}/>
-                            <TextBox keyboardType='numeric' title={'قیمت در روزهای تعطیل(ریال)'} value={this.state.holidaypriceprc+''} onChangeText={(text) => {this.setState({holidaypriceprc: text});}}/>
+                            }} previewImage={this.state.documentphotoiguPreview} onImagePreviewLoaded={(result)=>{
+                                this.setState({
+                                    documentphotoiguPreview: [result]
+                                });
+                            }}/>
+                            {this.state.documentphotoiguPreview!='' &&
+                            <Image source={{uri:  this.state.documentphotoiguPreview}}/>
+                            }
+                            <TextBox keyboardType='numeric' title={'قیمت در روزهای عادی با تخفیف(ریال)'} value={this.state.normalpriceprc+''} onChangeText={(text) => {this.setState({normalpriceprc: text});}}/>
+                            <TextBox keyboardType='numeric' title={'قیمت در روزهای تعطیل با تخفیف(ریال)'} value={this.state.holidaypriceprc+''} onChangeText={(text) => {this.setState({holidaypriceprc: text});}}/>
+                            <TextBox keyboardType='numeric' title={'تخفیف(درصد)'} value={this.state.discountnum+''} onChangeText={(text) => {this.setState({discountnum: text});}}/>
                             <TextBox keyboardType='numeric' title={'تخفیف رزرو بیش از یک هفته(درصد)'} value={this.state.weeklyoffnum+''} onChangeText={(text) => {this.setState({weeklyoffnum: text});}}/>
                             <TextBox keyboardType='numeric' title={'تخفیف رزرو بیش از یک ماه(درصد)'} value={this.state.monthlyoffnum+''} onChangeText={(text) => {this.setState({monthlyoffnum: text});}}/>
-                        </View>
+                                </View></TouchableOpacity>
+                            </View>
                     </ScrollView>
                 </View>
                 <View style={generalStyles.actionButtonContainer}>
@@ -184,6 +219,7 @@ export default class  trapp_villaManage extends SweetPage {
                 ComponentHelper.appendImageSelectorToFormDataIfNotNull(data,'documentphotoigu',this.state.SelecteddocumentphotoiguLocation);
                 data.append('normalpriceprc', this.state.normalpriceprc);
                 data.append('holidaypriceprc', this.state.holidaypriceprc);
+                data.append('discountnum', this.state.discountnum);
                 data.append('weeklyoffnum', this.state.weeklyoffnum);
                 data.append('monthlyoffnum', this.state.monthlyoffnum);
                 new SweetFetcher().Fetch('/trapp/villa'+Separator+id, method, data, data => {
@@ -192,10 +228,7 @@ export default class  trapp_villaManage extends SweetPage {
                     {
                         global.itemID=data.Data.id;
                         global.villaID=data.Data.id;
-                        if(id==='')
-                            this.props.navigation.navigate('trapp_villaoptionManage', { name: 'trapp_villaoptionManage' });
-                        else
-                            this.props.navigation.navigate('trapp_villaReservationInfo', { name: 'trapp_villaReservationInfo' });
+                        TrappUser.navigateToNextPage(this.props.navigation,TrappUser.PAGE_VILLA_MANAGE,id==='');
                         // this.props.navigation.navigate('trapp_villaReservationInfo', { name: 'trapp_villaReservationInfo' });
                         // this.props.navigation.navigate('placeman_placePhotoManage', { name: 'placeman_placePhotoManage' });
                     }

@@ -16,6 +16,7 @@ import Trapp_villaownerSearch from './Trapp_villaownerSearch';
 import SweetHttpRequest from '../../../../classes/sweet-http-request';
 import jMoment from 'moment-jalaali';
 import moment from 'moment';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 
 export default class trapp_villaownerList extends Component<{}> {
@@ -80,10 +81,10 @@ export default class trapp_villaownerList extends Component<{}> {
                         renderItem={({item}) =>
                         <TouchableWithoutFeedback onPress={() => {
                                 global.itemID=item.id;
-                                this.props.navigation.navigate('trapp_villaownerManage', { name: 'trapp_villaownerManage' });
-                            }}>
+                            SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaownerManage');
+                         }}>
                             <View style={generalStyles.ListItem}>
-                            
+
                 <Text style={generalStyles.simplelabel}>{item.name}</Text>
                 <Text style={generalStyles.simplelabel}>{item.usercontent}</Text>
                 <Text style={generalStyles.simplelabel}>{item.nationalcodebnum}</Text>
@@ -109,4 +110,3 @@ export default class trapp_villaownerList extends Component<{}> {
             );
     }
 }
-    

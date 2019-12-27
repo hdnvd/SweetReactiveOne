@@ -14,6 +14,7 @@ import CityAreaSelector from '../../../../sweet/components/CityAreaSelector';
 import CheckedRow from '../../../../sweet/components/CheckedRow';
 import Placeman_placeSearch from './Placeman_placeSearch';
 import SweetHttpRequest from '../../../../classes/sweet-http-request';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 
 export default class placeman_placeList extends Component<{}> {
@@ -77,10 +78,10 @@ export default class placeman_placeList extends Component<{}> {
                         renderItem={({item}) =>
                         <TouchableWithoutFeedback onPress={() => {
                                 global.itemID=item.id;
-                                this.props.navigation.navigate('placeman_placeManage', { name: 'placeman_placeManage' });
-                            }}>
+                            SweetNavigation.navigateToNormalPage(this.props.navigation,'placeman_placeManage');
+                         }}>
                             <View style={generalStyles.ListItem}>
-                            
+
                 <Text style={generalStyles.simplelabel}>{item.title}</Text>
                 <Text style={generalStyles.simplelabel}>{item.areacontent}</Text>
                 <Text style={generalStyles.simplelabel}>{item.address}</Text>
@@ -103,4 +104,3 @@ export default class placeman_placeList extends Component<{}> {
             );
     }
 }
-    

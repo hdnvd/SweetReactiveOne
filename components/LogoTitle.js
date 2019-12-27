@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, Alert, Image, TouchableHighlight, Dimensions,StatusBar} from 'react-native';
-import Navigation from "../classes/navigation";
+import SweetNavigation from "../classes/sweetNavigation";
 import generalStyles from "../styles/generalStyles";
 import Constants from '../classes/Constants';
 

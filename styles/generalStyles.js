@@ -500,7 +500,7 @@ export default StyleSheet.create(
                 marginVertical: 7,
                 marginHorizontal: 7,
                 borderWidth:2,
-                borderColor:Constants.BaseColor,
+                borderColor:BaseColor,
             },fulldatecontainer:
             {
                 backgroundColor:'#ee0'

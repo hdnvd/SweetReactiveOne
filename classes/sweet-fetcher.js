@@ -19,17 +19,29 @@ class SweetFetcher {
         // NetInfo.fetch().then(state => {
         //     SweetConsole.log(state)
         // });
+        let runAfterFetchFunction=(data)=>{
+            try{
+                AfterFetchFunction(data);
+            }
+            catch (error) {
+                if(Constants.Debugging)
+                    console.log(error);
+                this._sendErrorReport(URL,Method,PostingData,data,error);
+            }
+        };
+
+        let theBaseURL = Constants.SiteURL + "/api";
+        SweetConsole.log("Loading URL:" + theBaseURL + URL);
+        SweetConsole.log("Session Key: " + SessionKey);
         NetInfo.fetch().then(state => {
             if ( state.isInternetReachable ) {
+
                 // Run your API call
                 // alert("net available");
                 // this._isNetAvailable(Constants.SiteURL).then(response=>{
                 //     SweetConsole.log(response);
                 //     alert("after net available");
                 Method = Method.toString().trim().toLowerCase();
-                let theBaseURL = Constants.SiteURL + "/api";
-                SweetConsole.log("Loading URL:" + theBaseURL + URL);
-                SweetConsole.log("Session Key: " + SessionKey);
                 let PostData = null;
                 if (PostingData != null) {
                     if (Constants.ServerMode === Constants.SERVERMODE_LARAVEL) {
@@ -93,7 +105,7 @@ class SweetFetcher {
                             data.Data = Common.convertObjectPropertiesToLowerCase(data.Data);
                         }
                         // alert("91");
-                        AfterFetchFunction(data);
+                        runAfterFetchFunction(data);
                     }
 
                 }).catch(function (error) {
@@ -198,8 +210,16 @@ class SweetFetcher {
                     else {
                         if (OnErrorFunction != null)
                             OnErrorFunction(null);
-                        if(Constants.Debugging)
-                            SweetAlert.displaySimpleAlert('خطا',error.toString());
+                        console.log(error);
+                        if(Constants.Debugging) {
+                            if (error.toString().toLowerCase().includes("network error")) {
+                                SweetAlert.displaySimpleAlert('خطا', 'لطفا اتصال اینترنت خود را بررسی کنید');
+
+                            } else {
+                                SweetAlert.displaySimpleAlert('خطا', error.toString());
+
+                            }
+                        }
                         else
                             SweetAlert.displaySimpleAlert("خطا", 'خطایی پیش بینی نشده ای به وجود آمد، لطفا چند دقیقه دیگر مراجعه نمایید ');
                     }
@@ -228,6 +248,59 @@ class SweetFetcher {
 
             }
         });
+    }
+    _sendErrorReport(URL,Method,PostingData,data,error)
+    {
+        try{
+            NetInfo.fetch().then(state => {
+                try{
+
+                    if (state.isInternetReachable) {
+
+                        const theBaseURL = Constants.SiteURL + "/api";
+                        const url='/support/report-error';
+                        const data=new FormData();
+                        data.append('type','after-fetch');
+                        data.append('url',URL);
+                        data.append('method',Method);
+                        data.append('posting-data',JSON.stringify(PostingData));
+                        data.append('received-data',JSON.stringify(data));
+                        data.append('error',error.toString());
+                        // data.append('error-stack',JSON.stringify(error.stack));
+                        data.append('app',Constants.AppName);
+                        let ax = axios.create({
+                            baseURL: theBaseURL,
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            mode: 'cors',
+                            crossDomain: true,
+                        });
+                        if(Constants.Debugging){
+                            console.log(JSON.stringify(error));
+                            // console.log(JSON.stringify(error.stack));
+                            console.log(error.toString());
+                            console.log('error report sending');
+                        }
+                        ax.post(url, data).then(response=>{
+                            if(Constants.Debugging){
+                                console.log('error report sent');
+                                console.log(response);
+                            }
+                        });
+                    }
+                }catch (e) {
+                    if(Constants.Debugging){
+                        console.log('error sending report');
+                        console.log(e.toString());
+                    }
+                }
+            });
+        }
+        catch (e) {
+
+        }
     }
     Fetch(URL,Method,PostingData,AfterFetchFunction,OnErrorFunction,ServiceName,ActionName,history){
 

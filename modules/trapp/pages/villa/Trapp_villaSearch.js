@@ -12,7 +12,7 @@ import {
     Picker,
     TextInput,
     ScrollView,
-    FlatList, TouchableHighlight, ImageBackground
+    FlatList, TouchableHighlight, ImageBackground, Switch,
 } from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import SweetFetcher from '../../../../classes/sweet-fetcher';
@@ -23,6 +23,12 @@ import SweetButton from '../../../../sweet/components/SweetButton';
 import PersianCalendarPicker from "react-native-persian-calendar-picker";
 import jMoment from "moment-jalaali";
 import TextRow from "../../../../sweet/components/TextRow";
+import VillaViewStyles from '../../values/styles/villaViewStyles';
+import SwitchRow from '../../../../sweet/components/SwitchRow';
+import ViewBox from '../../../../sweet/components/ViewBox';
+import trapp_villaReserveStyles from '../../values/styles/trapp_villaReserveStyles';
+import NumberFormat from "react-number-format";
+import trapp_villaSearchStyles from '../../values/styles/trapp_villaSearchStyles';
 
 
 export default class Trapp_villaSearch extends Component<{}> {
@@ -43,10 +49,12 @@ export default class Trapp_villaSearch extends Component<{}> {
                 holidaypriceprc:'',
                 weeklyoffnum:'',
                 monthlyoffnum:'',
-                selectedCityValue: '-1',
+                selectedCityValue: null,
+                selectedProvinceValue: null,
                 selectedStartDate: null,
                 selectedStartTimeStamp: null,
                 selectedEndDate: null,
+                nonfreeoptions:{},
                 days: '1',
             },
             allOptions:{
@@ -54,6 +62,7 @@ export default class Trapp_villaSearch extends Component<{}> {
                 structuretypes:[],
                 owningtypes:[],
                 viewtypes:[],
+                nonfreeoptions:[],
             },
             showMoreOptions: false,
         };
@@ -109,6 +118,12 @@ export default class Trapp_villaSearch extends Component<{}> {
                                 SearchFields: {
                                     ...this.state.SearchFields,
                                     selectedCityValue: CityID
+                                }
+                            })}
+                            onProvinceSelected={(ProvinceID) => this.setState({
+                                SearchFields: {
+                                    ...this.state.SearchFields,
+                                    selectedProvinceValue: ProvinceID
                                 }
                             })}
                             displayAreaSelect={false}
@@ -170,6 +185,19 @@ export default class Trapp_villaSearch extends Component<{}> {
                                 }}
                                 options={this.state.allOptions.areatypes}
                             />
+                            <ViewBox style={VillaViewStyles.viewBox} title={'امکانات ویژه ویلا'}>
+                                {
+                                    this.state.allOptions.nonfreeoptions.map(dt => {
+                                        if (dt != null) {
+                                            return <NonFreeOptionItem key={dt.id} style={generalStyles.semiRow}
+                                                              title={"دارای "+dt.name} content={this.state.SearchFields.nonfreeoptions!=null && this.state.SearchFields.nonfreeoptions["option"+dt.id]!=null && this.state.SearchFields.nonfreeoptions["option"+dt.id]} onSwitchValueChange={(value)=>{
+                                                                  let nonfreeoptions=this.state.SearchFields.nonfreeoptions;
+                                                                  nonfreeoptions["option"+dt.id]=value;
+                                                                  this.setState({SearchFields:{...this.state.SearchFields,nonfreeoptions: nonfreeoptions}})
+                                            }}/>
+                                        }
+                                    })}
+                            </ViewBox>
                         </View>
                         }
                         <SweetButton title={'جستجو'} onPress={(onEnd) => {
@@ -211,3 +239,15 @@ const Styles = StyleSheet.create(
             },
     }
 );
+class NonFreeOptionItem extends Component<{}> {
+    render() {
+        return (
+            <View style={trapp_villaSearchStyles.factorItemContainer}>
+                {this.props.content != null &&
+                <Switch style={trapp_villaSearchStyles.factorItemSwitch} value={this.props.content}
+                        onValueChange={this.props.onSwitchValueChange}/>
+                }
+                <Text style={trapp_villaSearchStyles.factorItemTitle}>{this.props.title} </Text>
+            </View>);
+    }
+}

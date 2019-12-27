@@ -9,7 +9,7 @@ import {
     Modal,
     TextInput,
     Button,
-    TouchableHighlight, BackHandler,
+    TouchableHighlight, BackHandler, TouchableOpacity,
 } from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import Constants from '../../../../classes/Constants';
@@ -27,6 +27,9 @@ import {SceneMap, TabView} from 'react-native-tab-view';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import StarBox from '../../../../sweet/components/StarBox';
 import SwitchRow from '../../../../sweet/components/SwitchRow';
+import NumberFormat from 'react-number-format';
+import SweetNavigation from '../../../../classes/sweetNavigation';
+import villaListStyles from '../../values/styles/villaListStyles';
 let Window = Dimensions.get('window');
 export default class trapp_villaView extends SweetPage {
     componentDidMount(){
@@ -58,6 +61,9 @@ export default class trapp_villaView extends SweetPage {
             loadData = () => {
             this.setState({isLoading: true},()=>{
                 new VillaViewController().load(global.villaID,(data)=>{
+                    if(global.VillaNonFreeOptions==null)
+                        global.VillaNonFreeOptions=[];
+                    global.VillaNonFreeOptions[global.villaID]=data.nonfreeoptions;
                     this.setState({LoadedData: {...data}, isLoading: false});
                 });
             });
@@ -101,12 +107,16 @@ export default class trapp_villaView extends SweetPage {
             {/*<TextRow title={'توضیحات'} content={this.state.LoadedData.descriptionte} />*/}
             </ViewBox>
             <ViewBox style={VillaViewStyles.viewBox} title={'هزینه های ویلا'} logo={require('../../values/files/images/icon/colored/price.png')}>
-            <TextRow style={generalStyles.semiRow} title={'قیمت روز عادی'}
-            content={this.state.LoadedData.normalpriceprc + ' ریال'}/>
-            <TextRow style={generalStyles.semiRow} title={'قیمت روز تعطیل'}
-            content={this.state.LoadedData.holidaypriceprc + ' ریال'}/>
-            <TextRow style={generalStyles.semiRow} title={'تخفیف رزرو هفتگی'}
-            content={this.state.LoadedData.weeklyoffnum + ' درصد'}/>
+                <NumberFormat value={this.state.LoadedData.normalpriceprc/10} displayType={'text'} thousandSeparator={true}
+                              renderText={value =><TextRow style={generalStyles.semiRow} title={'روز عادی'} content={value+' تومان'} /> } />
+                <NumberFormat value={this.state.LoadedData.holidaypriceprc/10} displayType={'text'} thousandSeparator={true}
+                              renderText={value =><TextRow style={generalStyles.semiRow} title={'روز تعطیل'} content={value+' تومان'} /> } />
+
+            <TextRow style={generalStyles.semiRow} title={'تخفیف'}
+            content={this.state.LoadedData.discountnum + ' درصد'}/>
+
+                <TextRow style={generalStyles.semiRow} title={'تخفیف رزرو هفتگی'}
+                         content={this.state.LoadedData.weeklyoffnum + ' درصد'}/>
             <TextRow style={generalStyles.semiRow} title={'تخفیف رزرو ماهانه'}
             content={this.state.LoadedData.monthlyoffnum + ' درصد'}/>
             </ViewBox>
@@ -162,7 +172,7 @@ export default class trapp_villaView extends SweetPage {
                 <ViewBox style={VillaViewStyles.viewBox} title={'دیگر امکانات ویلا'} logo={require('../../values/files/images/icon/colored/option.png')}>
                     {
                         this.state.LoadedData.options.map(dt => {
-                            if (dt != null ) {
+                            if (dt != null && dt.countnum>0) {
                                 i = i + 1;
                                 return <TextRow key={i} style={generalStyles.semiRow}
                                                 title={dt.name} content={dt.countnum + ''}/>
@@ -176,17 +186,22 @@ export default class trapp_villaView extends SweetPage {
             return <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
             <View style={generalStyles.containerWithNoBG}>
             <ViewBox style={VillaViewStyles.viewBox} title={'نظرات'} logo={require('../../values/files/images/icon/colored/option.png')}>
-                <StarBox/>
-            {
-                this.state.LoadedData.comments.length>0 &&
-
-                this.state.LoadedData.comments.map(dt => {
-                    if (dt != null) {
-                        return <TextRow key={i} style={generalStyles.row}
-                                        title={dt.user.name + " می گوید: "} content={dt.text + ''}/>
+                {this.state.LoadedData.comments.length > 0 &&
+                <View style={{width:'100%'}}>
+                    <StarBox rate={this.state.LoadedData.rate} starStyle={villaListStyles.starstyle}
+                             style={villaListStyles.starBox}/>
+                    {this.state.LoadedData.comments.map(dt => {
+                        if (dt != null) {
+                            return <View style={VillaViewStyles.commentItemContainer}><TextRow key={i}
+                                                                                               style={generalStyles.row}
+                                                                                               title={dt.user.name + " می گوید: "}
+                                                                                               content={dt.text + ''}/>
+                            </View>
+                        }
+                    })
                     }
-                })
-            }
+                </View>
+                }
 
             {this.state.LoadedData.comments.length==0 &&
             <Text>هیچ نظری برای این ویلا ثبت نشده</Text>
@@ -203,15 +218,40 @@ export default class trapp_villaView extends SweetPage {
                 <TabView
                     renderTabBar = {props =>{
                         return <View style={VillaViewStyles.tabViewTopBar}>
+
                             <View style={VillaViewStyles.tabViewTopBarItem}>
-                                <Text style={VillaViewStyles.tabViewTopBarItemText}>مشخصات</Text>
+                            <TouchableOpacity onPress={()=>{
+                                this.setState({tabViewState:{...this.state.tabViewState,index:2}});
+                            }}>
+                                <View>
+                                    <Text style={VillaViewStyles.tabViewTopBarItemText}>مشخصات</Text>
+                                </View>
+
+                            </TouchableOpacity>
                                 {this.state.tabViewState.index==2 && <View style={VillaViewStyles.tabViewTopBarItemActiveBar}/> }
+
                             </View>
-                            <View style={VillaViewStyles.tabViewTopBarItem}><Text style={VillaViewStyles.tabViewTopBarItemText}>امکانات</Text>
+                            <View style={VillaViewStyles.tabViewTopBarItem}>
+                            <TouchableOpacity onPress={()=>{
+                                this.setState({tabViewState:{...this.state.tabViewState,index:1}});
+                            }}>
+                            <View>
+                                <Text style={VillaViewStyles.tabViewTopBarItemText}>امکانات</Text>
+                            </View>
+
+                            </TouchableOpacity>
                                 {this.state.tabViewState.index==1 && <View style={VillaViewStyles.tabViewTopBarItemActiveBar}/>}
+
                             </View>
-                            <View style={VillaViewStyles.tabViewTopBarItem}><Text style={VillaViewStyles.tabViewTopBarItemText}>نظرات</Text>
+                            <View style={VillaViewStyles.tabViewTopBarItem}>
+                            <TouchableOpacity onPress={()=>{
+                                this.setState({tabViewState:{...this.state.tabViewState,index:0}});
+                            }}><View><Text style={VillaViewStyles.tabViewTopBarItemText}>نظرات</Text>
+                            </View>
+
+                            </TouchableOpacity>
                                 {this.state.tabViewState.index==0 && <View style={VillaViewStyles.tabViewTopBarItemActiveBar}/>}
+
                             </View>
                         </View>;
                     }}
@@ -235,7 +275,7 @@ export default class trapp_villaView extends SweetPage {
                 {Constants.AppName==='trapp_user' &&
                 <SweetButton style={VillaViewStyles.Button1} title={'رزرو'} onPress={(onEnd) => {
                     global.villaId = global.villaID;
-                    this.props.navigation.navigate('trapp_villaReserve', {name: 'trapp_villaReserve'});
+                    SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaReserve');
                     onEnd(true);
                 }}/>}
                 <SweetButton style={VillaViewStyles.Button3} title={'مسیریابی ویلا'} onPress={(onEnd) => {
@@ -249,7 +289,12 @@ export default class trapp_villaView extends SweetPage {
             }
             {this.state.tabViewState.index == 0 &&
             <View style={VillaViewStyles.footer}>
-                {Constants.AppName === 'trapp_user' &&
+                {Constants.AppName === 'trapp_user' && !this.state.LoadedData.reservedbyuser &&
+
+                <TextRow title={''}
+                         content={'ارسال نظر پس از رزرو ویلا امکان پذیر است.'}/>
+                }
+                {Constants.AppName === 'trapp_user' && this.state.LoadedData.reservedbyuser &&
                 <SweetButton style={VillaViewStyles.ButtonFullComment} title={'ارسال نظر'} onPress={(onEnd) => {
                     this.setState({isCommentSendModalVisible:true});
                     onEnd(true);

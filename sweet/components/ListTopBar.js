@@ -27,7 +27,7 @@ export default class ListTopBar extends Component<{}> {
                     <View style={generalStyles.listTopBarItem}>
                         <SweetSelectorModal
                             options={this.props.sortFields}
-                            onValueChange={(option)=>{ this.props.onSortFieldSelect(option.key);}}
+                            onValueChange={(option)=>{ this.props.onSortFieldSelect(option.id);}}
                             onHideRequest={()=>{this.setState({displaySortFieldSelect:false});}}
                             visible={this.state.displaySortFieldSelect}/>
                         <Text style={generalStyles.listTopBarItemText}>مرتب سازی</Text>

@@ -39,7 +39,13 @@ export default class ImageSelector extends Component<{}> {
                         }
                         else {
                             // OnEnd(true);
+                            // let reader = new FileReader();
+                            // reader.readAsDataURL(response.path);
+                            // reader.onloadend = function (e) {
+                            //     this.props.onImagePreviewLoaded(reader.result);
+                            // }.bind(this);
                             this.props.onConfirm(response.path,OnEnd);
+
                         }
                     });
                 }}/>

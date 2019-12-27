@@ -11,7 +11,7 @@ import LogoTitle from '../components/LogoTitle'
 import generalStyles from '../styles/generalStyles'
 import {Button} from "react-native-elements";
 import ImageZoom from 'react-native-image-pan-zoom';
-import Navigation from "../classes/navigation";
+import SweetNavigation from "../classes/sweetNavigation";
 export default class PlaceVerification extends Component<{}> {
   static navigationOptions = {
       headerTitle: <LogoTitle />,
@@ -105,7 +105,7 @@ if(global.usertype==2)
                 .then(parsedRes=>
                 {
                     Alert.alert("پیام",parsedRes.message);
-                    this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('MapPage'));
+                    this.props.navigation.dispatch(SweetNavigation.resetAndNavigateToNormalPage(this.props.navigation,'MapPage'));
 
                 })
                 .catch(err=>console.log("Error"+err.message+" "+url));

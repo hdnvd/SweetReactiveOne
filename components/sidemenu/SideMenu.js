@@ -6,16 +6,20 @@ import {AsyncStorage, Dimensions, Image, ImageBackground, ScrollView, StyleSheet
 import {StackNavigator} from 'react-navigation';
 import generalStyles from '../../styles/generalStyles';
 import Constants from '../../classes/Constants';
-import Navigation from '../../classes/navigation';
+import SweetNavigation from '../../classes/sweetNavigation';
 import SweetAlert from '../../classes/SweetAlert';
 import User from '../../modules/users/classes/User';
 
 class SideMenu extends Component {
-    navigateToScreen = (route,parameters) => () => {
+    navigateToScreen = (route,parameters,isNoDrawer) => () => {
         const navigateAction = NavigationActions.navigate({
             routeName: route,
             params:parameters,
         });
+        if(isNoDrawer)
+            SweetNavigation.navigateToNoDrawerPage(this.props.navigation,route,parameters);
+        else
+            SweetNavigation.navigateToNormalPage(this.props.navigation,route,parameters);
         this.props.navigation.closeDrawer();
         // this.props.navigation.toggleDrawer();
         this.props.navigation.dispatch(navigateAction);
@@ -43,7 +47,7 @@ class SideMenu extends Component {
         let onLogout = () => {
             SweetAlert.displayYesNoAlert(() => {
                 AsyncStorage.clear().then(() => {
-                    this.props.navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'));
+                    SweetNavigation.resetAndNavigateToNoDrawerPage(this.props.navigation,'Login');
                 });
             }, 'خروج از حساب', 'آیا می خواهید از حساب خود خارج شوید؟');
         };
@@ -60,7 +64,7 @@ class SideMenu extends Component {
                             <View>
                                 <MenuItem title={'اطلاعات صاحب ویلا'} icon={require('../../images/icons/drawericons/ownerinfo.png')} onPress={this.navigateToScreen('trapp_villaownerManage')}/>
                                 <MenuItem title={'اطلاعات مکان ویلا'} icon={require('../../images/icons/drawericons/locationinfo.png')} onPress={this.navigateToScreen('placeman_placeManage')}/>
-                                <MenuItem title={'اطلاعات ویلا'} icon={require('../../images/icons/drawericons/villainfo.png')} onPress={this.navigateToScreen('trapp_villaManageNew')}/>
+                                <MenuItem title={'اطلاعات ویلا'} icon={require('../../images/icons/drawericons/villainfo.png')} onPress={this.navigateToScreen('trapp_villaManage')}/>
                                 <MenuItem title={'تصاویر ویلا'} icon={require('../../images/icons/drawericons/photos.png')} onPress={this.navigateToScreen('placeman_placePhotoManage')}/>
                                 <MenuItem title={'امکانات ویلا'} icon={require('../../images/icons/drawericons/options.png')} onPress={this.navigateToScreen('trapp_villaoptionManage')}/>
                                 <MenuItem title={'امکانات ویژه ویلا'} icon={require('../../images/icons/drawericons/options.png')} onPress={this.navigateToScreen('trapp_villanonfreeoptionManage')}/>

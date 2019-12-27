@@ -4,7 +4,8 @@
 
 import {AppRegistry,Dimensions,Text} from 'react-native';
 import {name as appName} from './app.json';
-import { createDrawerNavigator ,createAppContainer} from 'react-navigation';
+import { createAppContainer} from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import SideMenu from './components/sidemenu/SideMenu'
 import stackNav from './components/sidemenu/stackNav';
 import Localization from "./classes/Localization";
@@ -18,9 +19,7 @@ Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
 console.disableYellowBox = true;
 const drawernav = createDrawerNavigator({
-    Item1: {
-        screen: stackNav,
-    }
+    Item1: stackNav,
 }, {
     drawerPosition: Localization.isPhoneRTL()?'left':'right',
     // drawerPosition: 'right',

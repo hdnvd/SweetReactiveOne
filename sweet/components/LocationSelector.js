@@ -24,6 +24,7 @@ export default class LocationSelector extends Component<{}> {
                     navigate('SelectLocation', {name: 'SelectLocation'});
                     OnEnd(true);
                 }}/>
+
             </View>);
     }
 }

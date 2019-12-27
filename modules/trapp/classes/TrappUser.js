@@ -3,7 +3,7 @@
 
 import SweetFetcher from "../../../classes/sweet-fetcher";
 import {AsyncStorage} from "react-native";
-import Navigation from "../../../classes/navigation";
+import SweetNavigation from "../../../classes/sweetNavigation";
 
 export default class TrappUser {
 
@@ -17,18 +17,18 @@ export default class TrappUser {
                     if (owners == null || owners.length == 0)
                     {
                         // console.log("owners");
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaownerManage'));
+                        SweetNavigation.resetAndNavigateToNormalPage(navigation,'trapp_villaownerManage');
                     }
                     else if (places == null || places.length == 0)
                     {
                         global.ownerId=owners[0].id;
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('placeman_placeManage'));
+                        SweetNavigation.resetAndNavigateToNormalPage(navigation,'placeman_placeManage');
                     }
                     else if (villas == null || villas.length == 0)
                     {
                         global.placeId=places[0].id;
                         global.ownerId=owners[0].id;
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaManage'));
+                        SweetNavigation.resetAndNavigateToNormalPage(navigation,'trapp_villaManage');
                     }
                     else
                     {
@@ -36,15 +36,49 @@ export default class TrappUser {
                         global.itemID=villas[0].id;
                         global.villaID=villas[0].id;
                         global.ownerId=owners[0].id;
-                        // navigation.dispatch(Navigation.resetNavigationAndNavigate('placeman_placePhotoManage'));
-                        navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaReservationInfo'));
+                        // navigation.dispatch(SweetNavigation.resetNavigationAndNavigate('placeman_placePhotoManage'));
+                        SweetNavigation.resetAndNavigateToNormalPage(navigation,'trapp_villaReservationInfo');
                     }
                 }));
             }
         });
 
     }
+    static PAGE_OWNER_MANAGE=1;
+    static PAGE_PLACE_MANAGE=2;
+    static PAGE_VILLA_MANAGE=3;
+    static PAGE_VILLA_OPTIONS_MANAGE=4;
+    static PAGE_VILLA_NON_FREE_OPTIONS_MANAGE=5;
+    static PAGE_VILLA_PHOTO_MANAGE=6;
+    static PAGE_VILLA_RESERVATION_INFO=7;
+    static navigateToNextPage(navigation,currentPage,isAdding){
+        if(isAdding){
+            switch (currentPage) {
+                case this.PAGE_OWNER_MANAGE:
+                    SweetNavigation.navigateToNormalPage(navigation,"placeman_placeManage");
+                    break;
+                case this.PAGE_PLACE_MANAGE:
+                    SweetNavigation.navigateToNormalPage(navigation,'trapp_villaManage');
+                    break;
+                case this.PAGE_VILLA_MANAGE:
+                    SweetNavigation.navigateToNormalPage(navigation,'trapp_villaoptionManage');
+                    break;
+                case this.PAGE_VILLA_OPTIONS_MANAGE:
+                    SweetNavigation.navigateToNormalPage(navigation,'trapp_villanonfreeoptionManage');
+                    break;
+                case this.PAGE_VILLA_NON_FREE_OPTIONS_MANAGE:
+                    SweetNavigation.navigateToNormalPage(navigation,'placeman_placePhotoManage');
+                    break;
+                default:
+                    SweetNavigation.navigateToNormalPage(navigation,'trapp_villaReservationInfo');
+            }
+        }
+        else
+            SweetNavigation.navigateToNormalPage(navigation,'trapp_villaReservationInfo');
 
+
+
+    }
     static getUserFullInfo(onInfoLoaded) {
         new SweetFetcher().Fetch('/trapp/userfullinfo', SweetFetcher.METHOD_GET, null, data => {
             onInfoLoaded(data.Data);

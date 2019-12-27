@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Alert, ScrollView, Dimensions } from 'react-native';
+import {View, Alert, ScrollView, Dimensions, TouchableOpacity} from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import SweetFetcher from '../../../../classes/sweet-fetcher';
 import AccessManager from '../../../../classes/AccessManager';
@@ -9,6 +9,8 @@ import SweetButton from '../../../../sweet/components/SweetButton';
 import SweetPage from '../../../../sweet/components/SweetPage';
 import LogoTitle from '../../../../components/LogoTitle';
 import SweetConsole from '../../../../classes/SweetConsole';
+import SweetNavigation from '../../../../classes/sweetNavigation';
+import TrappUser from '../../classes/TrappUser';
 
 export default class  trapp_villaoptionManage extends SweetPage {
     static navigationOptions =({navigation}) => {
@@ -57,7 +59,7 @@ export default class  trapp_villaoptionManage extends SweetPage {
             <View style={{flex:1}}  >
                 <View  style={{flex:1}}>
                     <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
-                        <View style={generalStyles.container}>
+                        <View style={generalStyles.container}><TouchableOpacity><View>
                             {/*{this.state.OptionItems}*/}
                             {this.state.data.map(dt=>{
                                 return <TextBox selectTextOnFocus={true} keyboardType='numeric' title={'تعداد '+dt.name} value={this.getOption(dt.id)} onChangeText={(text) => {
@@ -69,7 +71,7 @@ export default class  trapp_villaoptionManage extends SweetPage {
                             })}
 
 
-                        </View>
+                        </View></TouchableOpacity></View>
                     </ScrollView>
                 </View>
                 <View style={generalStyles.actionButtonContainer}>
@@ -93,7 +95,8 @@ export default class  trapp_villaoptionManage extends SweetPage {
                                 if(data.hasOwnProperty('Data'))
                                 {
                                     // if(global.villaID<=0)
-                                    this.props.navigation.navigate('placeman_placePhotoManage', { name: 'placeman_placePhotoManage' });
+                                    TrappUser.navigateToNextPage(this.props.navigation,TrappUser.PAGE_VILLA_OPTIONS_MANAGE,true);
+
                                     // else
                                     // {
                                     //     this.props.navigation.navigate('trapp_villaReservationInfo', { name: 'trapp_villaReservationInfo' });

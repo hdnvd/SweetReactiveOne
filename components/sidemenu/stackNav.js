@@ -5,9 +5,9 @@ import {
     Text,
     View, TouchableOpacity
 } from 'react-native';
-import { DrawerActions } from 'react-navigation';
+import { DrawerActions } from 'react-navigation-drawer';
 
-import {createStackNavigator, StackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import IOSIcon from "react-native-vector-icons/Ionicons";
 import Splash from "../../pages/Splash";
 import Login from "../../modules/users/pages/Login";
@@ -42,6 +42,7 @@ const navOptions =({navigation}) => {
 
 const navOptionsWithNoMenu =({navigation}) => {
     return {
+        gesturesEnabled: false,
         headerTitle: <LogoTitle hideMenu={true}/>
     };
 };
@@ -73,9 +74,11 @@ const PageToRoute=(InitialRoute,theObject)=>
     }
     return resultArray;
 };
-let initialRoute={
+let initialRouteWithNoMenu={
     Splash:{screen:Splash,navigationOptions:navOptionsWithNoMenu},
     Login:{screen:Login,navigationOptions:navOptionsWithNoMenu},
+};
+let initialRoute={
     placeman_placeManage: {screen:placeman_placeManage,navigationOptions:getNavOptionsMenuFromTitle('اطلاعات مکان ویلا')},
     placeman_placePhotoManage: {screen:placeman_placePhotoManage,navigationOptions:getNavOptionsMenuFromTitle('تصاویر ویلا')},
 };
@@ -93,6 +96,26 @@ const Pages={
 var AllPages = Object.assign({}, Pages, carserviceorderRoutes,commentsRoutes,trappRoutes);
 let Routes=PageToRoute(initialRoute,AllPages);
 // console.log(Routes);
-const stackNav =createStackNavigator(Routes);
+const LoginStack =createStackNavigator(initialRouteWithNoMenu);
+const DrawerNavigation =createStackNavigator(Routes);
+LoginStack.navigationOptions = ({ navigation }) => {
+    let drawerLockMode = 'unlocked';
+    console.log(navigation);
+    if (navigation.state.index===0) {
+        drawerLockMode = 'locked-closed';
+    }
 
+    return {
+        drawerLockMode,
+    };
+};
+const stackNav=createStackNavigator({
+    loginStack: { screen: LoginStack },
+    drawerStack: { screen: DrawerNavigation }
+},{
+    // Default config for all screens
+    headerMode: 'none',
+    title: 'Main',
+    initialRouteName: 'loginStack'
+});
 export default stackNav;

@@ -18,6 +18,7 @@ import SweetPage from '../../../../sweet/components/SweetPage';
 import LogoTitle from '../../../../components/LogoTitle';
 import jMoment from 'moment-jalaali';
 import moment from 'moment';
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 
 export default class trapp_optionList extends SweetPage {
@@ -88,10 +89,10 @@ export default class trapp_optionList extends SweetPage {
                         renderItem={({item}) =>
                         <TouchableWithoutFeedback onPress={() => {
                                 global.itemID=item.id;
-                                this.props.navigation.navigate('trapp_optionManage', { name: 'trapp_optionManage' });
+                            SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_optionManage');
                             }}>
                             <View style={generalStyles.ListItem}>
-                            
+
                 <Text style={generalStyles.simplelabel}>{item.name}</Text>
                 <Text style={generalStyles.simplelabel}>{item.free}</Text>
                 <Text style={generalStyles.simplelabel}>{item.countable}</Text>
@@ -106,4 +107,3 @@ export default class trapp_optionList extends SweetPage {
             );
     }
 }
-    

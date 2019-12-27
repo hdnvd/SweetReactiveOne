@@ -1,6 +1,6 @@
 // @flow
 
-import Navigation from './navigation';
+import SweetNavigation from './sweetNavigation';
 import TrappUser from '../modules/trapp/classes/TrappUser';
 
 class Constants {
@@ -31,8 +31,8 @@ class Constants {
 
     /*
     //Trapp User
-    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'))};
-    static userIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('trapp_villaList'))};
+    static guestIndexNavigationEvent=(navigation)=>{SweetNavigation.resetAndNavigateToNormalPage(navigation,'Trapp_villaSearchIndex');};
+    static userIndexNavigationEvent=(navigation)=>{SweetNavigation.resetAndNavigateToNormalPage(navigation,'Trapp_villaSearchIndex');};
     static AppName="trapp_user";
     static DefaultRole="trapp_user";
     static BaseColor=Constants.UserBaseColor;
@@ -43,8 +43,9 @@ class Constants {
     static BaseIconText=require('../images/LogoText.png');
     static BaseTopMenuIcon=require('../images/LogoTextWhite.png');
     */
+
     //Trapp Owner
-    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'))};
+    static guestIndexNavigationEvent=(navigation)=>{SweetNavigation.resetAndNavigateToNoDrawerPage(navigation,'Login');};
     static userIndexNavigationEvent=TrappUser.navigateToUserStartPage;
     static AppName="trapp_villaowner";
     static DefaultRole="trapp_villaowner";
@@ -59,8 +60,8 @@ class Constants {
 
     /*
     //CarFixRequest
-    static guestIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('Login'))};
-    static userIndexNavigationEvent=(navigation)=>{navigation.dispatch(Navigation.resetNavigationAndNavigate('carserviceorder_requestIndex'))};
+    static guestIndexNavigationEvent=(navigation)=>{SweetNavigation.resetAndNavigateToNoDrawerPage(navigation,'Login');};
+    static userIndexNavigationEvent=(navigation)=>{SweetNavigation.resetAndNavigateToNormalPage(navigation,'carserviceorder_requestIndex');};
     static AppName="CarFixRequest";
     static DefaultRole="trapp_user";
     static BaseColor=Constants.OwnerBaseColor;

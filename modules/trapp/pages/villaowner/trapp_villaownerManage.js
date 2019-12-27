@@ -1,6 +1,18 @@
 import React, {Component} from 'react'
 import { CheckBox } from 'react-native-elements';
-import {StyleSheet, View, Alert, TextInput, ScrollView, Dimensions,AsyncStorage,Picker,Text,Image } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Alert,
+    TextInput,
+    ScrollView,
+    Dimensions,
+    AsyncStorage,
+    Picker,
+    Text,
+    Image,
+    TouchableOpacity,
+} from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import SweetFetcher from '../../../../classes/sweet-fetcher';
 import Common from '../../../../classes/Common';
@@ -20,6 +32,9 @@ import LogoTitle from "../../../../components/LogoTitle";
 import SweetAlert from "../../../../classes/SweetAlert";
 import HeaderSize from '../../../../classes/HeaderSize';
 import SweetPage from '../../../../sweet/components/SweetPage';
+import SweetNavigation from '../../../../classes/sweetNavigation';
+import CityAreaSelectorModal from '../../../../sweet/components/CityAreaSelectorModal';
+import TrappUser from '../../classes/TrappUser';
 
 export default class  trapp_villaownerManage extends SweetPage {
     static navigationOptions =({navigation}) => {
@@ -43,7 +58,7 @@ export default class  trapp_villaownerManage extends SweetPage {
 			email:'',
 			backupmobilebnum:'',
 			SelectedphotoiguLocation:'',
-			SelectednationalcardiguLocation:'',selectedAreaValue: -1,
+			SelectednationalcardiguLocation:'',
 
         };
 
@@ -55,7 +70,12 @@ export default class  trapp_villaownerManage extends SweetPage {
             this.setState({isLoading:true});
             new SweetFetcher().Fetch('/trapp/villaowner/'+global.ownerId,SweetFetcher.METHOD_GET, null, data => {
                 data.Data.isLoading=false;
-                this.setState({name:data.Data.name,SelecteduserValue:data.Data.user,nationalcodebnum:data.Data.nationalcodebnum,address:data.Data.address,shabacodebnum:data.Data.shabacodebnum,telbnum:data.Data.telbnum,backuptelbnum:data.Data.backuptelbnum,email:data.Data.email,backupmobilebnum:data.Data.backupmobilebnum,photoigu:data.Data.photoigu,nationalcardigu:data.Data.nationalcardigu,placemanarea:data.Data.placemanarea,});
+                this.setState({name:data.Data.name,SelecteduserValue:data.Data.user,
+                    nationalcodebnum:data.Data.nationalcodebnum,address:data.Data.address,
+                    shabacodebnum:data.Data.shabacodebnum,telbnum:data.Data.telbnum,
+                    backuptelbnum:data.Data.backuptelbnum,email:data.Data.email,
+                    backupmobilebnum:data.Data.backupmobilebnum,photoigu:data.Data.photoigu,
+                    nationalcardigu:data.Data.nationalcardigu,placemanarea:data.Data.placemanarea,});
             });
         }//IF
     };
@@ -66,13 +86,13 @@ export default class  trapp_villaownerManage extends SweetPage {
                 <View style={{flex:1}}  >
                     <View style={{flex:1}}>
                     <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
-                        <View style={generalStyles.container}>
+                        <View style={generalStyles.container}><TouchableOpacity><View>
                             <TextBox title={'نام'} value={this.state.name} onChangeText={(text) => {this.setState({name: text});}}/>
                             <TextBox keyboardType='numeric' maxLength={10} title={'کد ملی'} value={this.state.nationalcodebnum+''} onChangeText={(text) => {this.setState({nationalcodebnum: text});}}/>
 
-                            <CityAreaSelector
-                                onAreaSelected={(AreaID)=>this.setState({selectedAreaValue: AreaID})}
-                            />
+                            <CityAreaSelectorModal  area={this.state.placemanarea} onSelect={(placeObject)=>{
+                                this.setState({placemanarea:placeObject.area})
+                            }}/>
 
                             <TextBox title={'آدرس'} value={this.state.address} onChangeText={(text) => {this.setState({address: text});}}/>
                             <TextBox keyboardType='numeric' maxLength={24}  title={'کد شبا(بدون خط تیره و IR)'} value={this.state.shabacodebnum+''} onChangeText={(text) => {this.setState({shabacodebnum: text});}}/>
@@ -91,7 +111,7 @@ export default class  trapp_villaownerManage extends SweetPage {
                             }} />
 
 
-                        </View>
+                        </View></TouchableOpacity></View>
                     </ScrollView>
                     </View>
                     <View style={generalStyles.actionButtonContainer}>
@@ -124,17 +144,12 @@ export default class  trapp_villaownerManage extends SweetPage {
                                 data.append('backupmobilebnum', this.state.backupmobilebnum);
                                 ComponentHelper.appendImageSelectorToFormDataIfNotNull(data,'photoigu',this.state.SelectedphotoiguLocation);
                                 ComponentHelper.appendImageSelectorToFormDataIfNotNull(data,'nationalcardigu',this.state.SelectednationalcardiguLocation);
-                                data.append('placemanarea', this.state.selectedAreaValue);
+                                data.append('placemanarea', this.state.placemanarea);
                                 new SweetFetcher().Fetch('/trapp/villaowner'+Separator+id, method, data, data => {
                                     if(data.hasOwnProperty('Data'))
                                     {
                                         global.ownerId=data.Data.id;
-                                        if(id==='')
-                                            this.props.navigation.navigate('placeman_placeManage', { name: 'placeman_placeManage' });
-                                        else
-                                        {
-                                            this.props.navigation.navigate('trapp_villaReservationInfo', { name: 'trapp_villaReservationInfo' });
-                                        }
+                                        TrappUser.navigateToNextPage(this.props.navigation,TrappUser.PAGE_OWNER_MANAGE,id==='');
                                         OnEnd(true);
                                     }
                                 },(error)=>{OnEnd(false)},'trapp','villaowner',this.props.history);

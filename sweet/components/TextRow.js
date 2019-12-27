@@ -18,6 +18,7 @@ export default class TextRow extends Component<{}> {
                     </View>
                 }
                 <Text style={this.props.captionStyle!=null?this.props.captionStyle:generalStyles.caption}>{this.props.title} </Text>
+
                 <Text style={this.props.contentStyle!=null?this.props.contentStyle:generalStyles.content}>{this.props.content}</Text>
             </View>);
     }

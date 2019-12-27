@@ -10,6 +10,10 @@ import SweetAlert from '../../../classes/SweetAlert';
 export default class VillaListController extends controller{
 
     static SORTFIELD_NORMALPRICE = 'normalpriceprc';
+    static SORTFIELD_MAXNORMALPRICE = 'maxnormalpriceprc';
+    static SORTFIELD_MOSTPOPULAR = 'ordercountnum';
+    static SORTFIELD_MOSTDISCOUNT = 'discountnum';
+    static SORTFIELD_RATE = 'ratenum';
     static SORTFIELD_DISTANCE = 'distance';
     loadData = (SearchText, SearchFields,nextStartRow,sortField,latitude,longitude,onLoad) => {
 
@@ -19,6 +23,14 @@ export default class VillaListController extends controller{
         Request.appendVariable('__pagesize', Constants.DEFAULT_PAGESIZE);
         if (sortField === VillaListController.SORTFIELD_NORMALPRICE)
             Request.appendVariable('normalpriceprc__sort', '1');
+        if (sortField === VillaListController.SORTFIELD_MAXNORMALPRICE)
+            Request.appendVariable('maxnormalpriceprc__sort', '1');
+        else if (sortField === VillaListController.SORTFIELD_RATE)
+            Request.appendVariable('ratenum__sort', '1');
+        else if (sortField === VillaListController.SORTFIELD_MOSTPOPULAR)
+            Request.appendVariable('ordercountnum__sort', '1');
+        else if (sortField === VillaListController.SORTFIELD_MOSTDISCOUNT)
+            Request.appendVariable('discountnum__sort', '1');
         else
             Request.appendVariable('distance__sort', '1');
         // if (sortField === VillaListController.SORTFIELD_DISTANCE)

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Alert, ScrollView, Dimensions,Switch } from 'react-native';
+import {View, Alert, ScrollView, Dimensions, Switch, TouchableOpacity} from 'react-native';
 import generalStyles from '../../../../styles/generalStyles';
 import SweetFetcher from '../../../../classes/sweet-fetcher';
 import AccessManager from '../../../../classes/AccessManager';
@@ -10,6 +10,7 @@ import SweetPage from '../../../../sweet/components/SweetPage';
 import LogoTitle from '../../../../components/LogoTitle';
 import SweetConsole from '../../../../classes/SweetConsole';
 import ViewBox from '../../../../sweet/components/ViewBox';
+import TrappUser from '../../classes/TrappUser';
 
 export default class  trapp_villanonfreeoptionManage extends SweetPage {
     static navigationOptions =({navigation}) => {
@@ -58,7 +59,7 @@ export default class  trapp_villanonfreeoptionManage extends SweetPage {
             <View style={{flex:1}}  >
                 <View  style={{flex:1}}>
                     <ScrollView contentContainerStyle={{minHeight: this.height || Window.height}}>
-                        <View style={generalStyles.container}>
+                        <View style={generalStyles.container}><TouchableOpacity><View>
                             {/*{this.state.OptionItems}*/}
                             {this.state.data.map(dt=>{
                                 return <MyOptionBox name={dt.name} value={this.getOption(dt.id).pricenum+""} onChangeText={(text) => {
@@ -75,7 +76,7 @@ export default class  trapp_villanonfreeoptionManage extends SweetPage {
                             })}
 
 
-                        </View>
+                        </View></TouchableOpacity></View>
                     </ScrollView>
                 </View>
                 <View style={generalStyles.actionButtonContainer}>
@@ -100,6 +101,8 @@ export default class  trapp_villanonfreeoptionManage extends SweetPage {
                             new SweetFetcher().Fetch('/trapp/villanonfreeoption/byvilla/'+global.villaID, method, data, data => {
                                 if(data.hasOwnProperty('Data'))
                                 {
+                                    TrappUser.navigateToNextPage(this.props.navigation,TrappUser.PAGE_VILLA_NON_FREE_OPTIONS_MANAGE,true);
+
                                     // if(global.villaID<=0)
                                     // this.props.navigation.navigate('placeman_placePhotoManage', { name: 'placeman_placePhotoManage' });
                                     // else

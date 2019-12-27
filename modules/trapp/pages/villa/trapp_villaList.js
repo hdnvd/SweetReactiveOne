@@ -16,6 +16,8 @@ import PageContainer from '../../../../sweet/components/PageContainer';
 import villaListStyles from '../../values/styles/villaListStyles';
 import SweetListPage from '../../../../sweet/components/SweetListPage';
 import StarBox from '../../../../sweet/components/StarBox';
+import NumberFormat from "react-number-format";
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 export default class trapp_villaList extends SweetListPage {
     state =
@@ -31,10 +33,10 @@ export default class trapp_villaList extends SweetListPage {
                     },
             },
             SearchFields:{
-                selectedCityValue:this.props.navigation.getParam('selectedCityValue',-1),
-                selectedProvinceValue:this.props.navigation.getParam('selectedProvinceValue',-1),
-                selectedStartDate:this.props.navigation.getParam('selectedStartDate',-1),
-                days:this.props.navigation.getParam('days',-1),
+                selectedCityValue:this.props.navigation.getParam('selectedCityValue',null),
+                selectedProvinceValue:this.props.navigation.getParam('selectedProvinceValue',null),
+                selectedStartDate:this.props.navigation.getParam('selectedStartDate',null),
+                days:this.props.navigation.getParam('days',null),
             }
         };
     static onFindClick: trapp_villaList.onFindClick;
@@ -47,7 +49,8 @@ export default class trapp_villaList extends SweetListPage {
                 this.setState({displaySearchPage: true});
             },
             onReserveListClick: () => {
-                this.props.navigation.navigate('trapp_orderList', {name: 'trapp_orderList'});
+
+                SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_orderList');
             },
         });
 
@@ -82,6 +85,7 @@ export default class trapp_villaList extends SweetListPage {
     };
 
     render() {
+        console.log(this.state.sortField);
         let captionStyle = {
             ...StyleSheet.flatten(generalStyles.caption),
             color: '#333333',
@@ -96,7 +100,7 @@ export default class trapp_villaList extends SweetListPage {
         const renderListItem=({item})=>{
             return <TouchableWithoutFeedback onPress={() => {
                 global.villaID = item.id;
-                this.props.navigation.navigate('trapp_villaView', {name: 'trapp_villaView'});
+                SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaView');
             }}>
                 <View style={generalStyles.ListItem}>
                     <View style={{
@@ -139,14 +143,22 @@ export default class trapp_villaList extends SweetListPage {
                                  contentStyle={contentStyle} title={''}
                                  content={item.placemanplacecontent}
                                  logo={require('../../values/files/images/icon/colored/location.png')}/>
-                        <TextRow style={ItemStyle} captionStyle={captionStyle}
-                                 contentStyle={contentStyle} title={''}
-                                 content={item.normalpriceprc + ' ریال'}
-                                 logo={require('../../values/files/images/icon/colored/price.png')}/>
+                        <NumberFormat value={item.normalpriceprc/10} displayType={'text'} thousandSeparator={true}
+                                      renderText={value =><TextRow style={ItemStyle} captionStyle={captionStyle}
+                                                                   contentStyle={contentStyle} title={''}
+                                                                   content={value + ' تومان'}
+                                                                   logo={require('../../values/files/images/icon/colored/price.png')}/> } />
+
                     </View>
+                    {item.discountnum>10 &&
+                    <Image style={villaListStyles.listitemthumbnailTop}
+                           source={require('../../values/files/images/icon/discount.png')}/>}
                     <Image style={generalStyles.listitemthumbnail}
                            source={item.photo != '' ? {uri: 'data:image/jpeg;base64,' + item.photo} : require('../../../../images/Logo.png')}/>
+
+                    {item.commentcount > 0 &&
                     <StarBox rate={item.rate} starStyle={villaListStyles.starstyle} style={villaListStyles.starBox}/>
+                    }
                 </View>
             </TouchableWithoutFeedback>
         };
@@ -163,7 +175,12 @@ export default class trapp_villaList extends SweetListPage {
             }
             {!this.state.displaySearchPage &&
             <View style={generalStyles.listcontainer}>
-                {this._getTopBar([{id: VillaListController.SORTFIELD_NORMALPRICE,name: 'مبلغ'}, {id: VillaListController.SORTFIELD_DISTANCE, name: 'فاصله از من'}])}
+                {this._getTopBar([{id: VillaListController.SORTFIELD_NORMALPRICE,name: 'ارزانترین'},
+                    {id: VillaListController.SORTFIELD_RATE,name: 'محبوب ترین'},
+                    {id: VillaListController.SORTFIELD_DISTANCE, name: 'نزدیکترین'},
+                    {id: VillaListController.SORTFIELD_MAXNORMALPRICE,name: 'گرانترین'},
+                    {id: VillaListController.SORTFIELD_MOSTPOPULAR,name: 'پرطرفدارترین'},
+                    {id: VillaListController.SORTFIELD_MOSTDISCOUNT,name: 'پرتخفیف ترین'},])}
                 <PageContainer isLoading={this.state.isLoading}
                                isEmpty={this.state.villas == null || this.state.villas.length == 0}>
                     <View style={generalStyles.listcontainer}>

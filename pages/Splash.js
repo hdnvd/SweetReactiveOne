@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import LogoTitle from "../components/LogoTitle";
-import Navigation from "../classes/navigation";
+import SweetNavigation from "../classes/sweetNavigation";
 import Constants from "../classes/Constants";
 import SweetFetcher from '../classes/sweet-fetcher';
 import UserNavigator from '../modules/users/classes/UserNavigator';
@@ -47,7 +47,7 @@ export default class Splash extends Component<{}> {
 
 
             return(
-                <View style={styles.container}>
+                <View style={styles.container} testID={'welcome'}>
                     <Image source={Constants.BaseIcon} style={styles.img} resizeMode={'stretch'}/>
                     {/*<Text style={styles.centerText}>Travel App</Text>*/}
                 </View>

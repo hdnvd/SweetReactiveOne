@@ -17,7 +17,7 @@ export default class  PlaceManager {
     set onAreasLoaded(value) {
         this._onAreasLoaded = value;
     }
-    static findPlaces(Text)
+    static findPlaces(Text,findProvinces,findCities,findAreas)
     {
         let t=Text.replace(" ","");
         let fPs=[];
@@ -25,22 +25,25 @@ export default class  PlaceManager {
         let fAs=[];
         for(let p of global.provinces)
         {
-            if(p.title.includes(t))
+            if(findProvinces && p.title.includes(t))
                 fPs.push(p);
             for(let c of p.cities)
             {
-                if(c.title.includes(t))
+                if(findCities && c.title.includes(t))
                 {
                     c.province=p;
                     fCs.push(c);
                 }
-                for(let a of c.areas)
-                    if(a.title.includes(t))
-                    {
+                if(findAreas)
+                {
+                    for(let a of c.areas)
+                        if(a.title.includes(t))
+                        {
 
-                        a.city=c;
-                        fAs.push(a);
-                    }
+                            a.city=c;
+                            fAs.push(a);
+                        }
+                }
             }
         }
         let result=[fPs,fCs,fAs];
@@ -48,33 +51,59 @@ export default class  PlaceManager {
         // console.log(result);
         return result;
     }
+    getAreaObjectFromId(areaId)
+    {
+        for(let p of global.provinces)
+        {
+            for(let c of p.cities)
+            {
+                for(let a of c.areas)
+                    if(a.id==areaId)
+                        return {area:a,city:c,province:p};
+            }
+        }
+        return null;
+    }
+    getCityObjectFromId(cityId)
+    {
+        for(let p of global.provinces)
+        {
+            for(let c of p.cities)
+            {
+                    if(c.id==cityId)
+                        return {city:c,province:p};
+            }
+        }
+        return null;
+    }
+    getProvinceObjectFromId(provinceId)
+    {
+        if(global.provinces!=null)
+            return {province:global.provinces.filter(a => a.id == provinceId)[0]};
+        return null;
+    }
     _onProvincesLoaded=(a)=>{};
     _onCitiesLoaded=(a)=>{};
     _onAreasLoaded=(a)=>{};
+    getProvinces()
+    {
+        return global.provinces;
+    }
     loadProvinceOptions = () => {
         if(global.provinces!=null)
         {
             let placemanareas=global.provinces.map(dt=>{return <Picker.Item label={dt.title} value={dt.id} style={generalStyles.pickerItem} />});
             this._onProvincesLoaded(placemanareas,global.provinces);
         }
-        // new SweetFetcher().Fetch('/placeman/provinces',SweetFetcher.METHOD_GET, null, data => {
-        //     let placemanareas=data.Data.map(dt=>{return <Picker.Item label={dt.title} value={dt.id} style={generalStyles.pickerItem} />});
-        //     this._onProvincesLoaded(placemanareas,data.Data);
-        // });
     };
     loadCityOptions = (ProvinceID) => {
-        if(global.provinces!=null) {
-            let Province = global.provinces.filter(a => a.id == ProvinceID)[0];
-            let placemanareas = Province.cities.map(dt => {
+        const province=this.getProvinceObjectFromId(ProvinceID);
+        if(province!=null && province.province!=null) {
+            let placemanareas = province.province.cities.map(dt => {
                 return <Picker.Item label={dt.title} value={dt.id} style={generalStyles.pickerItem}/>
             });
-            this._onCitiesLoaded(placemanareas, Province.cities);
+            this._onCitiesLoaded(placemanareas, province.province.cities);
         }
-        // alert(ProvinceID);
-        // new SweetFetcher().Fetch('/placeman/provinces/' + ProvinceID + '',SweetFetcher.METHOD_GET, null, data => {
-        //     let placemanareas=data.Data.map(dt=>{return <Picker.Item label={dt.title} value={dt.id} style={generalStyles.pickerItem} />});
-        //     this._onCitiesLoaded(placemanareas,data.Data);
-        // });
     };
     loadAreaOptions = (ProvinceID,CityID) => {
 

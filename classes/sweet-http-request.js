@@ -1,5 +1,6 @@
 
 import Common from './Common';
+import {Alert} from 'react-native';
 class SweetHttpRequest {
     _Variables=[];
     constructor()
@@ -10,8 +11,18 @@ class SweetHttpRequest {
     {
         if(skipNullValues===null)
             skipNullValues=false;
-        if(!skipNullValues || (Value!==null && (Value+'').length>0))
+        if(!skipNullValues || (Value!==null && Value!=='-1' && Value!==-1 && (Value+'').length>0))
+        {
+            if(Value!=null)
+            {
+                if(typeof(Value)=="object")
+                {
+                    Value=JSON.stringify(Value);
+                }
+
+            }
             this._Variables.push({id:Name,value:Value});
+        }
     }
     appendVariables(Variables,NameField,ValueField,skipNullValues)
     {

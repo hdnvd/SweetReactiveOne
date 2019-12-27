@@ -21,6 +21,7 @@ import SimpleMap from '../../../../components/SimpleMap';
 import Carousel from 'react-native-snap-carousel';
 import TextBox from "../../../../sweet/components/TextBox";
 import IconItem from "../../../../sweet/components/IconItem";
+import SweetNavigation from '../../../../classes/sweetNavigation';
 
 export default class  trapp_villaView extends Component<{}> {
     constructor(props) {
@@ -186,13 +187,13 @@ export default class  trapp_villaView extends Component<{}> {
                             <TextRow title={'محل'} content={this.state.LoadedData.placemanplaceinfo.provinceinfo.title+' - '+this.state.LoadedData.placemanplaceinfo.cityinfo.title+' - '+this.state.LoadedData.placemanplaceinfo.areainfo.title} />
                                     <SweetButton style={Styles.Button1} title={'رزرو'} onPress={()=>{
                                 global.villaId=global.villaID;
-                                this.props.navigation.navigate('trapp_villaReserve', { name: 'trapp_villaReserve' });
+                                        SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaReserve');
                             }}/>
                             {this.state.LoadedData.reservedbyuser&&
                             <View>
                                 <SweetButton style={Styles.Button2}  title={'مشاهده اطلاعات میزبان'} onPress={(onEnd)=>{
                                     global.villaOwnerUserId=this.state.LoadedData.placemanplaceinfo.user;
-                                    this.props.navigation.navigate('trapp_villaownerView', { name: 'trapp_villaownerView' });
+                                    SweetNavigation.navigateToNormalPage(this.props.navigation,'trapp_villaownerView');
                                     onEnd(true);
                                 }}/>
                                 <SweetButton style={Styles.Button3}  title={'مسیریابی ویلا'} onPress={(onEnd)=>{

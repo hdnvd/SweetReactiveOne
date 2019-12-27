@@ -8,7 +8,7 @@
 import { Dimensions  } from 'react-native';
 
 import React, {Fragment} from 'react';
-import { createDrawerNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import SideMenu from './components/sidemenu/SideMenu'
 import stackNav from './components/sidemenu/stackNav';
 
@@ -31,3 +31,4 @@ const App = createDrawerNavigator({
 global.usertype = 1;//Branch Admins
 console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
 export default App;
+
