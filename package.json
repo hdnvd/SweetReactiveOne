@@ -37,7 +37,7 @@
     "react-native-modal-datetime-picker": "^7.5.0",
     "react-native-modal-selector": "^1.1.1",
     "react-native-persian-calendar-picker": "https://github.com/hdnvd/react-native-persian-calendar-picker.git",
-    "react-native-reanimated": "^1.4.0",
+    "react-native-reanimated": "^2.10.0",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-searchable-dropdown": "https://github.com/zubairpaizer/react-native-searchable-dropdown.git",
     "react-native-snap-carousel": "^3.8.0",
